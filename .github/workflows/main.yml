@@ -1,4 +1,4 @@
-name: Build RaselEduTools Pro Installer
+name: Build RaselEduTools Pro
 
 on:
   push:
@@ -19,11 +19,11 @@ jobs:
 
     - name: Install Libraries
       run: |
+        python -m pip install --upgrade pip
         pip install pywebview pystray pillow pyinstaller
 
     - name: Create EXE
       run: |
-        # --noconsole এবং --collect-all ব্যবহার করা হয়েছে
         pyinstaller --onefile --windowed --name "RaselEduTools" main.py
 
     - name: Build Setup (Inno Setup)
@@ -39,7 +39,6 @@ jobs:
         OutputBaseFilename=RaselEduTools_Pro_Setup
         Compression=lzma
         SolidCompression=yes
-        # পিসি চালু হলে অটো-রান করার অপশন
         PrivilegesRequired=admin 
 
         [Files]
@@ -51,12 +50,12 @@ jobs:
         Name: "{userstartup}\Rasel Edu Tools"; Filename: "{app}\RaselEduTools.exe"
 
         [Run]
-        Filename: "{app}\RaselEduTools.exe"; Description: "Launch Rasel Edu Tools"; Flags: nowait postinstall skipifsilent
+        Filename: "{app}\RaselEduTools.exe"; Description: "Launch App"; Flags: nowait postinstall skipifsilent
         "@
         $iss | Out-File -FilePath setup.iss -Encoding utf8
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup.iss
 
-    - name: Upload Pro Installer
+    - name: Upload Installer
       uses: actions/upload-artifact@v4
       with:
         name: RaselEduTools-Pro-Installer
