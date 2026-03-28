@@ -1,19 +1,20 @@
 [Setup]
-AppName=Ras PC Care
+AppName=Rasel Web Tools PRO
 AppVersion=1.0
-DefaultDirName={autopf}\RasPcCare
-DefaultGroupName=Ras PC Care
+DefaultDirName={autopf}\RaselWebTools
+DefaultGroupName=Rasel Web Tools PRO
 OutputDir=dist
-OutputBaseFilename=RasPcCare_Setup
+OutputBaseFilename=Rasel_WebTools_Setup
 Compression=lzma
 SolidCompression=yes
 
 [Files]
-Source: "dist\main.exe"; DestDir: "{app}"; Flags: ignoreversion
+; Source শুধু main.exe থাকবে, কারণ আমরা রানারকে dist ফোল্ডারে নিয়ে যাব
+Source: "main.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
-Name: "{group}\Ras PC Care"; Filename: "{app}\main.exe"
-Name: "{autodesktop}\Ras PC Care"; Filename: "{app}\main.exe"
+Name: "{group}\Rasel Web Tools"; Filename: "{app}\main.exe"
+Name: "{autodesktop}\Rasel Web Tools"; Filename: "{app}\main.exe"
 
 [Run]
-Filename: "{app}\main.exe"; Description: "Launch Ras PC Care"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\main.exe"; Description: "Launch Rasel Web Tools PRO"; Flags: nowait postinstall skipifsilent
