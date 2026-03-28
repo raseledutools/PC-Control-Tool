@@ -1,5 +1,7 @@
-screen-brightness-control
 customtkinter
-pyinstaller
-pystray
 Pillow
+PyPDF2
+qrcode
+opencv-python-headless
+PyMuPDF
+pyinstaller
