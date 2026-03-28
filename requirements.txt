@@ -1,7 +1,4 @@
-customtkinter
-Pillow
-PyPDF2
-qrcode
-opencv-python-headless
-PyMuPDF
+pywebview
+pystray
+pillow
 pyinstaller
