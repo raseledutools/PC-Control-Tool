@@ -1,4 +1,4 @@
-name: Build RasPcCare 2.0
+name: Build Rasel Toolset Offline PRO
 
 on: [push, workflow_dispatch]
 
@@ -17,14 +17,14 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install screen-brightness-control customtkinter pyinstaller pystray Pillow
+        pip install customtkinter Pillow PyPDF2 qrcode opencv-python-headless PyMuPDF pyinstaller
 
-    - name: Build with PyInstaller
+    - name: Build EXE with PyInstaller
       run: |
-        pyinstaller --noconsole --onefile --hidden-import pystray --hidden-import PIL._tkinter_finder main.py
+        pyinstaller --noconsole --onefile main.py
 
-    - name: Upload Artifact
+    - name: Upload Software
       uses: actions/upload-artifact@v4
       with:
-        name: RasPcCare-V2
+        name: Rasel-Web-Tools-PRO
         path: dist/main.exe
