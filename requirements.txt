@@ -1,3 +1,5 @@
 screen-brightness-control
 customtkinter
 pyinstaller
+pystray
+Pillow
