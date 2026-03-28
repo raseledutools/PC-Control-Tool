@@ -7,7 +7,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -21,10 +22,11 @@ jobs:
 
     - name: Build Portable EXE
       run: |
-        pyinstaller --noconsole --onefile main.py
+        pyinstaller --noconsole --onefile --hidden-import=fitz --hidden-import=cv2 main.py
 
-    - name: Move setup.iss to dist
-      run: copy setup.iss dist\setup.iss
+    - name: Prepare Setup File
+      run: |
+        copy setup.iss dist\setup.iss
 
     - name: Compile Inno Setup Installer
       uses: aybe/iscc-action@v2
