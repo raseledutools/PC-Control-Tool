@@ -1,30 +1,63 @@
-name: Build Rasel Toolset Offline PRO
+name: Build RaselEduTools Pro Installer
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches: [ "main", "master" ]
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout Code
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    - name: Install dependencies
+    - name: Install Libraries
       run: |
-        python -m pip install --upgrade pip
-        pip install customtkinter Pillow PyPDF2 qrcode opencv-python-headless PyMuPDF pyinstaller
+        pip install pywebview pystray pillow pyinstaller
 
-    - name: Build EXE with PyInstaller
+    - name: Create EXE
       run: |
-        pyinstaller --noconsole --onefile main.py
+        # --noconsole এবং --collect-all ব্যবহার করা হয়েছে
+        pyinstaller --onefile --windowed --name "RaselEduTools" main.py
 
-    - name: Upload Software
+    - name: Build Setup (Inno Setup)
+      shell: pwsh
+      run: |
+        $iss = @"
+        [Setup]
+        AppName=Rasel Edu Tools Pro
+        AppVersion=2.0
+        DefaultDirName={pf}\RaselEduTools
+        DefaultGroupName=RaselEduTools
+        OutputDir=.
+        OutputBaseFilename=RaselEduTools_Pro_Setup
+        Compression=lzma
+        SolidCompression=yes
+        # পিসি চালু হলে অটো-রান করার অপশন
+        PrivilegesRequired=admin 
+
+        [Files]
+        Source: "dist\RaselEduTools.exe"; DestDir: "{app}"; Flags: ignoreversion
+
+        [Icons]
+        Name: "{group}\Rasel Edu Tools"; Filename: "{app}\RaselEduTools.exe"
+        Name: "{commondesktop}\Rasel Edu Tools"; Filename: "{app}\RaselEduTools.exe"
+        Name: "{userstartup}\Rasel Edu Tools"; Filename: "{app}\RaselEduTools.exe"
+
+        [Run]
+        Filename: "{app}\RaselEduTools.exe"; Description: "Launch Rasel Edu Tools"; Flags: nowait postinstall skipifsilent
+        "@
+        $iss | Out-File -FilePath setup.iss -Encoding utf8
+        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup.iss
+
+    - name: Upload Pro Installer
       uses: actions/upload-artifact@v4
       with:
-        name: Rasel-Web-Tools-PRO
-        path: dist/main.exe
+        name: RaselEduTools-Pro-Installer
+        path: RaselEduTools_Pro_Setup.exe
