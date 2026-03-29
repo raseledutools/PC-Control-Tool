@@ -8,15 +8,16 @@ import sys
 # গ্লোবাল উইন্ডো ভেরিয়েবল
 window = None
 
-# .exe এর ভেতর থেকে ফাইলগুলো খুঁজে বের করার লজিক
+# .exe এর ভেতর থেকে ফাইল খুঁজে বের করার জন্য ফিক্স
 def get_local_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
 def create_tray_icon():
-    # হোয়াটসঅ্যাপ স্টাইল সবুজ আইকন
-    return Image.new('RGB', (64, 64), color=(0, 168, 132))
+    # সবুজ আইকন (RasGram Style)
+    image = Image.new('RGB', (64, 64), color=(0, 168, 132))
+    return image
 
 def show_window(icon, item):
     global window
@@ -36,23 +37,22 @@ def setup_tray():
     icon.run()
 
 if __name__ == '__main__':
-    # সিস্টেম ট্রে থ্রেড
+    # সিস্টেম ট্রে ব্যাকগ্রাউন্ডে চালু
     threading.Thread(target=setup_tray, daemon=True).start()
     
-    # লোকাল index.html ফাইলের পাথ
+    # আপনার মেইন এন্ট্রি পয়েন্ট
     local_html = get_local_path('index.html') 
     
-    # উইন্ডো তৈরি
     window = webview.create_window(
-        'RasGram | Secure Messenger', 
+        'RasGram | Native Messenger', 
         url=local_html,
-        width=1100, 
-        height=750,
+        width=1150, 
+        height=800,
         min_size=(800, 600)
     )
     
-    # ব্যাকগ্রাউন্ডে লুকিয়ে রাখার কমান্ড
+    # ক্লোজ করলে ট্রে-তে যাবে
     window.events.closing += lambda: window.hide() or False
     
-    # http_server=True অত্যন্ত জরুরি, এটি ছাড়া Firebase/CORS এরর আসবে
+    # Edge Chromium + Local Server (CORS Error ফিক্স করার জন্য)
     webview.start(gui='edgechromium', private_mode=False, http_server=True)
