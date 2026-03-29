@@ -4,7 +4,6 @@ on:
   push:
     branches: [ "main", "master" ]
 
-# Node.js 24 Force করার কমান্ড (ওয়ার্নিং রিমুভ করতে)
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -15,8 +14,6 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
-      with:
-        set-safe-directory: true
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -31,7 +28,8 @@ jobs:
     - name: Create Native EXE
       shell: pwsh
       run: |
-        # আপনার সব বড় JS এবং HTML ফাইল প্যাক করা হচ্ছে
+        # Ekhane amra file er name fix na kore bolchi sob html ebong js file k pack koro
+        # Jate script (1).js thakleও build fail na hoy
         pyinstaller --onefile --windowed --add-data "*.html;." --add-data "*.js;." --name "RasGram" main.py
 
     - name: Build Installer (Inno Setup)
