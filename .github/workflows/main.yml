@@ -1,4 +1,4 @@
-name: Build RaselEduTools Pro
+name: Build Native RasGram Desktop
 
 on:
   push:
@@ -17,46 +17,44 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: Install Libraries
+    - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pywebview pystray pillow pyinstaller
 
-    - name: Create EXE
+    - name: Create Native EXE
       run: |
-        pyinstaller --onefile --windowed --name "RaselEduTools" main.py
+        # Ei command ti apnar shob HTML/JS file ke EXE er vitore pack kore dibe
+        pyinstaller --onefile --windowed --add-data "index.html;." --add-data "chat_indivisual.html;." --add-data "script.js;." --add-data "webrtc_core.js;." --add-data "sw.js;." --name "RasGram" main.py
 
-    - name: Build Setup (Inno Setup)
+    - name: Build Installer (Inno Setup)
       shell: pwsh
       run: |
         $iss = @"
         [Setup]
-        AppName=Rasel Edu Tools Pro
-        AppVersion=2.0
-        DefaultDirName={pf}\RaselEduTools
-        DefaultGroupName=RaselEduTools
+        AppName=RasGram Native
+        AppVersion=1.0
+        DefaultDirName={pf}\RasGram
+        DefaultGroupName=RasGram
         OutputDir=.
-        OutputBaseFilename=RaselEduTools_Pro_Setup
-        Compression=lzma
-        SolidCompression=yes
-        PrivilegesRequired=admin 
+        OutputBaseFilename=RasGram_Native_Setup
+        PrivilegesRequired=admin
 
         [Files]
-        Source: "dist\RaselEduTools.exe"; DestDir: "{app}"; Flags: ignoreversion
+        Source: "dist\RasGram.exe"; DestDir: "{app}"; Flags: ignoreversion
 
         [Icons]
-        Name: "{group}\Rasel Edu Tools"; Filename: "{app}\RaselEduTools.exe"
-        Name: "{commondesktop}\Rasel Edu Tools"; Filename: "{app}\RaselEduTools.exe"
-        Name: "{userstartup}\Rasel Edu Tools"; Filename: "{app}\RaselEduTools.exe"
+        Name: "{commondesktop}\RasGram"; Filename: "{app}\RasGram.exe"
+        Name: "{userstartup}\RasGram"; Filename: "{app}\RasGram.exe"
 
         [Run]
-        Filename: "{app}\RaselEduTools.exe"; Description: "Launch App"; Flags: nowait postinstall skipifsilent
+        Filename: "{app}\RasGram.exe"; Description: "Launch RasGram"; Flags: nowait postinstall skipifsilent
         "@
         $iss | Out-File -FilePath setup.iss -Encoding utf8
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup.iss
 
-    - name: Upload Installer
+    - name: Upload RasGram
       uses: actions/upload-artifact@v4
       with:
-        name: RaselEduTools-Pro-Installer
-        path: RaselEduTools_Pro_Setup.exe
+        name: RasGram-Native-App
+        path: RasGram_Native_Setup.exe
