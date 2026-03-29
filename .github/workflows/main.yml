@@ -23,9 +23,10 @@ jobs:
         pip install pywebview pystray pillow pyinstaller
 
     - name: Create Native EXE
+      shell: pwsh
       run: |
-        # Ei command ti apnar shob HTML/JS file ke EXE er vitore pack kore dibe
-        pyinstaller --onefile --windowed --add-data "index.html;." --add-data "chat_indivisual.html;." --add-data "script.js;." --add-data "webrtc_core.js;." --add-data "sw.js;." --name "RasGram" main.py
+        # ফোল্ডারের সব .html ও .js ফাইল প্যাক করা হচ্ছে
+        pyinstaller --onefile --windowed --add-data "*.html;." --add-data "*.js;." --name "RasGram" main.py
 
     - name: Build Installer (Inno Setup)
       shell: pwsh
