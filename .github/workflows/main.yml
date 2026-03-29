@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main", "master" ]
 
-# এই অংশটি Node.js এর ওয়ার্নিং বন্ধ করে দেবে
+# Node.js 24 Force করার কমান্ড (ওয়ার্নিং রিমুভ করতে)
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -16,7 +16,6 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
-        # এটি নিশ্চিত করবে যে গিটহাব লেটেস্ট নোড ভার্সন ব্যবহার করছে
         set-safe-directory: true
 
     - name: Set up Python
@@ -32,7 +31,7 @@ jobs:
     - name: Create Native EXE
       shell: pwsh
       run: |
-        # সব HTML এবং JS ফাইলকে নেটিভলি প্যাক করা
+        # আপনার সব বড় JS এবং HTML ফাইল প্যাক করা হচ্ছে
         pyinstaller --onefile --windowed --add-data "*.html;." --add-data "*.js;." --name "RasGram" main.py
 
     - name: Build Installer (Inno Setup)
