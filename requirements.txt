@@ -1,4 +1,5 @@
-pywebview
+pywebview[qt]
 pystray
 pillow
 pyinstaller
+pythonnet
