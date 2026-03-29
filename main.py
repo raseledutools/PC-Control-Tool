@@ -1,52 +1,49 @@
 import webview
 import pystray
-from PIL import Image, ImageDraw
+from PIL import Image
 import threading
 import os
 import sys
 
-# গ্লোবাল ভেরিয়েবল
-window = None
+# PyInstaller diye .exe korle local file er path ber korar jonno function
+def get_local_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
 
-def create_image():
-    # অ্যাপের জন্য একটি ডিফল্ট আইকন (৬৪x৬৪)
-    image = Image.new('RGB', (64, 64), color=(43, 87, 154))
-    return image
-
-def on_quit(icon, item):
-    icon.stop()
-    os._exit(0)
+def create_tray_icon():
+    # WhatsApp er moto green icon
+    return Image.new('RGB', (64, 64), color=(0, 168, 132))
 
 def show_window(icon, item):
-    global window
     if window:
         window.show()
 
+def quit_app(icon, item):
+    icon.stop()
+    os._exit(0)
+
 def setup_tray():
-    icon = pystray.Icon("RaselEduTools", create_image(), "Rasel Edu Tools", 
-                        menu=pystray.Menu(
-                            pystray.MenuItem('Open App', show_window, default=True),
-                            pystray.MenuItem('Exit', on_quit)
-                        ))
+    menu = pystray.Menu(
+        pystray.MenuItem('Open RasGram', show_window, default=True),
+        pystray.MenuItem('Exit', quit_app)
+    )
+    icon = pystray.Icon("RasGram", create_tray_icon(), "RasGram Desktop", menu)
     icon.run()
 
 if __name__ == '__main__':
-    # সিস্টেম ট্রে থ্রেড শুরু
     threading.Thread(target=setup_tray, daemon=True).start()
     
-    # মেইন উইন্ডো তৈরি
-    # 'https://raseledutools.github.io' লোড হবে
+    # Ekhane URL er bodole apnar local index.html file load kora hocche
+    local_html = get_local_path('index.html') 
+    
     window = webview.create_window(
-        'Rasel Edu Tools', 
-        'https://raseledutools.github.io', 
-        width=1200, 
-        height=800,
-        background_color='#FFFFFF'
+        'RasGram | Secure Messenger', 
+        url=local_html, # Sorasori hard drive theke load hobe
+        width=1100, 
+        height=750,
+        min_size=(800, 600)
     )
     
-    # ক্লোজ করলে যাতে ব্যাকগ্রাউন্ডে (ট্রে-তে) থাকে
     window.events.closing += lambda: window.hide() or False
-    
-    # সবচেয়ে গুরুত্বপূর্ণ অংশ: এখানে gui='edgechromium' ফোর্স করা হয়েছে
-    # এটি আপনার পিসির Microsoft Edge ইঞ্জিন ব্যবহার করবে, ফলে CSS এরর হবে না
-    webview.start(gui='edgechromium')
+    webview.start(gui='edgechromium', private_mode=False)
