@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main", "master" ]
 
-# এই ভেরিয়েবলটি Node.js ওয়ার্নিংটি সমাধান করে দেবে
+# এই অংশটি Node.js এর ওয়ার্নিং বন্ধ করে দেবে
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -15,6 +15,9 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        # এটি নিশ্চিত করবে যে গিটহাব লেটেস্ট নোড ভার্সন ব্যবহার করছে
+        set-safe-directory: true
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -29,6 +32,7 @@ jobs:
     - name: Create Native EXE
       shell: pwsh
       run: |
+        # সব HTML এবং JS ফাইলকে নেটিভলি প্যাক করা
         pyinstaller --onefile --windowed --add-data "*.html;." --add-data "*.js;." --name "RasGram" main.py
 
     - name: Build Installer (Inno Setup)
@@ -57,7 +61,7 @@ jobs:
         $iss | Out-File -FilePath setup.iss -Encoding utf8
         & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup.iss
 
-    - name: Upload RasGram
+    - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: RasGram-Native-App
