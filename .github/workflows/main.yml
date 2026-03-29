@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main", "master" ]
 
-# Node.js এর ওয়ার্নিং বন্ধ করার জন্য এবং ফিউচার-প্রুফ করার জন্য
+# Node.js এর ওয়ার্নিং বন্ধ করার জন্য এবং ফিউচার-প্রুফ করার
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
