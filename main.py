@@ -2,18 +2,15 @@ import webview
 import pystray
 from PIL import Image, ImageDraw
 import threading
-import sys
 import os
+import sys
 
 # গ্লোবাল ভেরিয়েবল
 window = None
 
 def create_image():
-    # একটি সিম্পল আইকন তৈরি (আপনি চাইলে নিজের .png ফাইলও ব্যবহার করতে পারেন)
-    width, height = 64, 64
-    image = Image.new('RGB', (width, height), color=(43, 87, 154))
-    dc = ImageDraw.Draw(image)
-    dc.rectangle([16, 16, 48, 48], fill=(255, 255, 255))
+    # অ্যাপের জন্য একটি ডিফল্ট আইকন (৬৪x৬৪)
+    image = Image.new('RGB', (64, 64), color=(43, 87, 154))
     return image
 
 def on_quit(icon, item):
@@ -26,33 +23,30 @@ def show_window(icon, item):
         window.show()
 
 def setup_tray():
-    icon_image = create_image()
-    menu = pystray.Menu(
-        pystray.MenuItem('Open RaselEduTools', show_window, default=True),
-        pystray.MenuItem('Exit', on_quit)
-    )
-    icon = pystray.Icon("RaselEduTools", icon_image, "Rasel Edu Tools", menu)
+    icon = pystray.Icon("RaselEduTools", create_image(), "Rasel Edu Tools", 
+                        menu=pystray.Menu(
+                            pystray.MenuItem('Open App', show_window, default=True),
+                            pystray.MenuItem('Exit', on_quit)
+                        ))
     icon.run()
 
-def start_app():
-    global window
-    url = 'https://raseledutools.github.io'
+if __name__ == '__main__':
+    # সিস্টেম ট্রে থ্রেড শুরু
+    threading.Thread(target=setup_tray, daemon=True).start()
+    
+    # মেইন উইন্ডো তৈরি
+    # 'https://raseledutools.github.io' লোড হবে
     window = webview.create_window(
         'Rasel Edu Tools', 
-        url, 
+        'https://raseledutools.github.io', 
         width=1200, 
         height=800,
-        confirm_close=False # ক্লোজ করলে যাতে পুরোপুরি কেটে না যায়
+        background_color='#FFFFFF'
     )
     
-    # উইন্ডো ক্লোজ ইভেন্ট হ্যান্ডেল করা (মিনিমাইজ টু ট্রে)
+    # ক্লোজ করলে যাতে ব্যাকগ্রাউন্ডে (ট্রে-তে) থাকে
     window.events.closing += lambda: window.hide() or False
-    webview.start(gui='mshtml')
-
-if __name__ == '__main__':
-    # ট্রে আইকন আলাদা থ্রেডে চালানো
-    tray_thread = threading.Thread(target=setup_tray, daemon=True)
-    tray_thread.start()
     
-    # মেইন অ্যাপ শুরু
-    start_app()
+    # সবচেয়ে গুরুত্বপূর্ণ অংশ: এখানে gui='edgechromium' ফোর্স করা হয়েছে
+    # এটি আপনার পিসির Microsoft Edge ইঞ্জিন ব্যবহার করবে, ফলে CSS এরর হবে না
+    webview.start(gui='edgechromium')
