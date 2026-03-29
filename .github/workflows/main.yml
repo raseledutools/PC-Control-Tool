@@ -4,6 +4,7 @@ on:
   push:
     branches: [ "main", "master" ]
 
+# Node.js এর ওয়ার্নিং বন্ধ করার জন্য এবং ফিউচার-প্রুফ করার জন্য
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -14,6 +15,8 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
+      with:
+        set-safe-directory: true
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -25,12 +28,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install pywebview pystray pillow pyinstaller
 
-    - name: Create Native EXE
+    - name: Create Native EXE (Offline Bundle)
       shell: pwsh
       run: |
-        # Ekhane amra file er name fix na kore bolchi sob html ebong js file k pack koro
-        # Jate script (1).js thakleও build fail na hoy
-        pyinstaller --onefile --windowed --add-data "*.html;." --add-data "*.js;." --name "RasGram" main.py
+        # এখানে *.html এবং *.js দিয়ে আপনার সব ফাইল প্যাক করা হচ্ছে
+        # যদি tailwind.min.js বা all.min.css ফাইল থাকে, সেগুলোও অটো প্যাক হবে
+        pyinstaller --onefile --windowed --add-data "*.html;." --add-data "*.js;." --add-data "*.css;." --name "RasGram" main.py
 
     - name: Build Installer (Inno Setup)
       shell: pwsh
