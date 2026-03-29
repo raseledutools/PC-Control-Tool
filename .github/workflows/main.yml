@@ -4,6 +4,10 @@ on:
   push:
     branches: [ "main", "master" ]
 
+# এই ভেরিয়েবলটি Node.js ওয়ার্নিংটি সমাধান করে দেবে
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: windows-latest
@@ -25,7 +29,6 @@ jobs:
     - name: Create Native EXE
       shell: pwsh
       run: |
-        # ফোল্ডারের সব .html ও .js ফাইল প্যাক করা হচ্ছে
         pyinstaller --onefile --windowed --add-data "*.html;." --add-data "*.js;." --name "RasGram" main.py
 
     - name: Build Installer (Inno Setup)
