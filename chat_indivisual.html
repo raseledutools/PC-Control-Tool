@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>RasGram | Secure Messenger - Enhanced WhatsApp Experience</title>
+<meta name="title" content="RasGram | Secure Messenger - Enhanced WhatsApp Experience">
+<meta name="description" content="RasGram is a secure messaging platform by Rasel EduTools that overcomes common WhatsApp limitations. Enjoy seamless chatting, Rasel Messenger features, and Rasel WhatsApp style security in one place.">
+
+<meta name="keywords" content="RasGram, Rasel Messenger, Rasel WhatsApp, Secure WhatsApp, WhatsApp Limitations Solver, Rasel EduTools, Secure Messenger, Chat Individual">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://raseledutools.github.io/chat_indivisual.html">
+<meta property="og:title" content="RasGram | Secure Messenger - Secure & Limitless Chatting">
+<meta property="og:description" content="Experience the next level of messaging with RasGram. Built to provide a secure and flexible chat environment, overcoming traditional WhatsApp limits.">
+<meta property="og:image" content="https://raseledutools.github.io/your-logo.png">
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://raseledutools.github.io/chat_indivisual.html">
+<meta property="twitter:title" content="RasGram | Secure Messenger">
+<meta property="twitter:description" content="Tired of WhatsApp limits? Try RasGram for a secure and powerful messaging experience.">
+<meta property="twitter:image" content="https://raseledutools.github.io/your-logo.png">
+
+<link rel="canonical" href="https://raseledutools.github.io/chat_indivisual.html">
+
+<meta name="author" content="Rasel EduTools">
+    <meta name="theme-color" content="#111b21">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <title>RasGram | Secure Messenger</title>
+    
+    <link rel="manifest" href="./manifest.json">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        /* 🔥 RasGram Dark Theme 🔥 */
+        :root {
+            --wa-bg: #111b21;
+            --wa-panel: #202c33;
+            --wa-green: #00a884;
+            --wa-green-hover: #029071;
+            --wa-text: #e9edef;
+            --wa-muted: #8696a0;
+            --wa-bubble-in: #202c33;
+            --wa-bubble-out: #005c4b;
+            --wa-border: #222d34;
+            --wa-blue-tick: #53bdeb;
+        }
+
+        html, body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--wa-bg); 
+            color: var(--wa-text); 
+            overflow: hidden; 
+            height: 100vh; 
+            width: 100vw;
+            margin: 0; padding: 0;
+            position: fixed; 
+            top: 0; left: 0; touch-action: none;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Chat Background */
+        .chat-bg {
+            background-color: #0b141a;
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+            background-repeat: repeat;
+            background-blend-mode: overlay;
+            opacity: 0.95;
+            transition: all 0.3s ease;
+        }
+
+        /* ☀️ Light Mode Overrides ☀️ */
+        body.light-mode { background-color: #f0f2f5 !important; color: #111b21 !important; }
+        body.light-mode .bg-\[\#111b21\] { background-color: #f0f2f5 !important; transition: background-color 0.3s ease; }
+        body.light-mode .bg-\[\#202c33\] { background-color: #ffffff !important; transition: background-color 0.3s ease; }
+        body.light-mode .bg-\[\#222d34\] { background-color: #efeae2 !important; transition: background-color 0.3s ease; }
+        body.light-mode .bg-\[\#233138\] { background-color: #ffffff !important; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        body.light-mode .bg-\[\#2a3942\] { background-color: #ffffff !important; }
+        body.light-mode .bg-\[\#182229\] { background-color: #ffeecd !important; color: #54656f !important;}
+        body.light-mode .bg-\[\#005c4b\] { background-color: #d9fdd3 !important; }
+        
+        body.light-mode .text-white { color: #111b21 !important; }
+        body.light-mode .text-\[\#e9edef\] { color: #111b21 !important; }
+        body.light-mode .text-\[\#8696a0\] { color: #667781 !important; }
+        body.light-mode .text-\[\#aebac1\] { color: #54656f !important; }
+        body.light-mode .text-\[\#d1d7db\] { color: #3b4a54 !important; }
+        
+        body.light-mode .border-\[\#222d34\] { border-color: #e9edef !important; }
+        
+        body.light-mode .hover\:bg-\[\#202c33\]:hover { background-color: #f5f6f6 !important; }
+        body.light-mode .hover\:bg-\[\#111b21\]:hover { background-color: #f0f2f5 !important; }
+        body.light-mode .contact-active { background-color: #f0f2f5 !important; }
+        
+        body.light-mode .chat-bg { background-color: #efeae2 !important; opacity: 0.6 !important; }
+
+        /* 🌟 Smooth Animations 🌟 */
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes slideInRight {
+            0% { opacity: 0; transform: translateX(30px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .msg-bubble { animation: popIn 0.2s ease-out forwards; }
+        .slide-in-anim { animation: slideInRight 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
+        .fade-in-anim { animation: fadeIn 0.3s ease-out forwards; }
+
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(134, 150, 160, 0.3); border-radius: 10px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: rgba(134, 150, 160, 0.5); }
+        
+        .glass-panel { background: var(--wa-panel); border-right: 1px solid var(--wa-border); }
+        
+        textarea, input { font-size: 16px !important; } 
+        
+        .contact-active { background-color: #2a3942; }
+
+        audio { height: 40px; outline: none; border-radius: 20px; width: 100%; }
+        audio::-webkit-media-controls-panel { background-color: rgba(255, 255, 255, 0.9); }
+        
+        .dropdown-menu { display: none; }
+        .dropdown-menu.show { display: block; animation: popIn 0.15s ease-out forwards; }
+
+        /* Custom Audio Player */
+        .audio-slider {
+            -webkit-appearance: none; background: rgba(255,255,255,0.2);
+            height: 4px; border-radius: 5px; outline: none;
+        }
+        .audio-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%;
+            background: #fff; cursor: pointer; box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+    </style>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "522b3136-c16d-4deb-8423-74dac3d6452e", // আপনার আইডি সেট করা আছে
+    });
+  });
+</script>
+</head>
+<body class="flex selection:bg-[#00a884]/30">
+
+    <audio id="notification-sound" src="https://assets.mixkit.co/active_storage/sfx/2854/2854-preview.mp3" preload="auto"></audio>
+    <audio id="ringtone-sound" src="https://assets.mixkit.co/active_storage/sfx/2803/2803-preview.mp3" preload="auto" loop></audio>
+
+    <div id="image-lightbox" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-md transition-opacity opacity-0 overflow-auto" style="touch-action: pan-x pan-y pinch-zoom;" onclick="closeLightbox()">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 md:top-8 md:right-8 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 text-white text-xl hover:bg-[#00a884] transition-colors z-50 fixed">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <img id="lightbox-img" src="" class="m-auto max-w-full max-h-full object-contain p-2 md:p-8 transform scale-95 transition-transform duration-300 shadow-2xl rounded-xl cursor-zoom-in origin-center" onclick="event.stopPropagation(); this.classList.toggle('scale-150'); this.classList.toggle('cursor-zoom-out'); this.classList.toggle('cursor-zoom-in');">
+    </div>
+
+    <div id="join-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#111b21] transition-opacity">
+        <div class="bg-[#202c33] p-8 rounded-2xl w-full max-w-sm shadow-2xl text-center transform scale-100 transition-transform relative fade-in-anim border border-[#222d34]">
+            <div class="w-20 h-20 bg-[#00a884]/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-[#00a884]/30 shadow-lg shadow-[#00a884]/20">
+                <i class="fa-solid fa-paper-plane text-4xl text-[#00a884] pr-1"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2 text-white">Welcome to RasGram</h2>
+            <p class="text-[#8696a0] text-sm mb-6 font-medium">Create your secure account.</p>
+            
+            <form id="join-form" class="space-y-4">
+                <input type="text" id="reg-name" required autocomplete="off" class="w-full bg-[#111b21] border border-[#222d34] rounded-lg p-3 text-white focus:outline-none focus:border-[#00a884] transition-colors font-medium" placeholder="Your Name">
+                <input type="tel" id="reg-mobile" required autocomplete="off" pattern="[0-9]{11}" class="w-full bg-[#111b21] border border-[#222d34] rounded-lg p-3 text-white focus:outline-none focus:border-[#00a884] transition-colors font-medium tracking-widest" placeholder="Mobile Number (11 digits)">
+                <input type="password" id="reg-password" required autocomplete="off" minlength="6" maxlength="6" class="w-full bg-[#111b21] border border-[#222d34] rounded-lg p-3 text-white focus:outline-none focus:border-[#00a884] transition-colors font-medium tracking-widest text-center text-lg" placeholder="Create 6-digit Password">
+                
+                <button type="submit" id="join-btn" class="w-full bg-[#00a884] hover:bg-[#029071] py-3 rounded-lg text-[#111b21] font-bold uppercase tracking-wide transition-colors mt-4">Create & Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="unlock-modal" class="hidden fixed inset-0 z-[105] flex items-center justify-center p-4 bg-[#111b21] transition-opacity">
+        <div class="bg-[#202c33] p-8 rounded-2xl w-full max-w-sm shadow-2xl text-center transform scale-100 transition-transform relative fade-in-anim border border-[#222d34]">
+            <img id="unlock-avatar" src="" class="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-2 border-[#00a884] shadow-lg">
+            <h2 class="text-xl font-bold mb-2 text-white" id="unlock-name-display">Welcome Back</h2>
+            <p class="text-[#8696a0] text-sm mb-6 font-medium">Enter password to decrypt chats.</p>
+            
+            <form id="unlock-form" class="space-y-4">
+                <input type="password" id="unlock-password" required autocomplete="off" class="w-full bg-[#111b21] border border-[#222d34] rounded-lg p-3 text-white focus:outline-none focus:border-[#00a884] transition-colors font-bold tracking-[0.5em] text-center text-2xl" placeholder="••••••">
+                <button type="submit" id="unlock-btn" class="w-full bg-[#00a884] hover:bg-[#029071] py-3 rounded-lg text-[#111b21] font-bold uppercase tracking-wide transition-colors mt-4"><i class="fa-solid fa-lock-open mr-2"></i> Unlock</button>
+                <button type="button" onclick="logoutPvtChat()" class="text-sm text-[#f15c6d] hover:underline mt-4 inline-block">Log in as another user</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="group-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="bg-[#202c33] rounded-2xl w-full max-w-md shadow-2xl flex flex-col max-h-[80vh] fade-in-anim">
+            <div class="p-4 border-b border-[#222d34] flex justify-between items-center">
+                <h2 class="text-xl font-bold text-white">New Group</h2>
+                <button onclick="closeGroupModal()" class="text-[#8696a0] hover:text-white w-8 h-8 rounded-full hover:bg-[#111b21] flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-4 border-b border-[#222d34]">
+                <input type="text" id="group-name" class="w-full bg-[#111b21] border border-[#222d34] rounded-lg p-3 text-white focus:outline-none focus:border-[#00a884] font-medium" placeholder="Group Subject">
+            </div>
+            <div class="p-2 overflow-y-auto custom-scroll flex-grow" id="group-contact-list"></div>
+            <div class="p-4 border-t border-[#222d34]">
+                <button onclick="createGroup()" class="w-full bg-[#00a884] text-[#111b21] font-bold py-3 rounded-lg hover:bg-[#029071] transition-colors"><i class="fa-solid fa-check mr-2"></i> Create Group</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-lock-modal" class="hidden fixed inset-0 z-[170] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity">
+        <div class="bg-[#202c33] rounded-2xl w-full max-w-md shadow-2xl flex flex-col max-h-[80vh] fade-in-anim">
+            <div class="p-4 border-b border-[#222d34] flex justify-between items-center">
+                <h2 class="text-xl font-bold text-white">Select Chats to Lock</h2>
+                <button onclick="closeAddLockModal()" class="text-[#8696a0] hover:text-white w-8 h-8 rounded-full hover:bg-[#111b21] flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-2 overflow-y-auto custom-scroll flex-grow" id="unlocked-contact-list"></div>
+            <div class="p-4 border-t border-[#222d34]">
+                <button onclick="addSelectedToLock()" class="w-full bg-[#00a884] text-[#111b21] font-bold py-3 rounded-lg hover:bg-[#029071] transition-colors"><i class="fa-solid fa-lock mr-2"></i> Lock Selected Chats</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pin-modal" class="hidden fixed inset-0 z-[160] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+        <div class="bg-[#202c33] rounded-2xl p-6 w-full max-w-sm text-center shadow-2xl border border-[#222d34] fade-in-anim">
+            <div class="w-16 h-16 bg-[#00a884]/20 text-[#00a884] rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-xl font-bold text-white mb-2" id="pin-title">Enter PIN</h2>
+            <p class="text-[#8696a0] text-[15px] mb-6 font-medium" id="pin-desc">Unlock your secure chats.</p>
+            <input type="password" id="pin-input" class="w-full bg-[#111b21] border border-[#222d34] rounded-lg p-3 text-center text-white focus:outline-none focus:border-[#00a884] mb-6 text-2xl tracking-[0.5em] font-bold" maxlength="4" placeholder="••••">
+            <div class="flex gap-3">
+                <button onclick="closePinModal()" class="flex-1 bg-transparent text-white py-3 rounded-lg border border-[#222d34] hover:bg-[#111b21] font-medium transition-colors text-[16px]">Cancel</button>
+                <button id="pin-action-btn" onclick="handlePinAction()" class="flex-1 bg-[#00a884] text-[#111b21] font-bold py-3 rounded-lg hover:bg-[#029071] transition-colors text-[16px]">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="hidden fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="bg-[#202c33] border border-[#222d34] p-8 rounded-2xl w-full max-w-sm shadow-2xl text-center relative fade-in-anim">
+            <button onclick="closeSettings()" class="absolute top-4 right-4 w-8 h-8 rounded-full hover:bg-[#111b21] text-[#8696a0] hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="text-xl font-bold mb-6 text-white">Profile</h2>
+
+            <div class="relative w-36 h-36 mx-auto mb-6 group cursor-pointer" onclick="document.getElementById('profile-pic-input').click()">
+                <img id="settings-avatar-preview" src="" class="w-full h-full rounded-full object-cover group-hover:opacity-60 transition-opacity bg-[#111b21] shadow-lg border border-[#222d34]">
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full bg-black/50">
+                    <i class="fa-solid fa-camera text-3xl text-white"></i>
+                </div>
+            </div>
+            <input type="file" id="profile-pic-input" accept="image/*" class="hidden" onchange="previewProfilePic(event)">
+
+            <div class="mb-6 text-left border-b border-[#00a884] pb-2">
+                <label class="text-[#00a884] text-sm font-bold mb-1 block">Your Name</label>
+                <div class="flex items-center justify-between">
+                    <input type="text" id="settings-name-input" class="w-full bg-transparent p-1 text-white focus:outline-none text-[17px] font-medium" placeholder="Enter your name">
+                    <i class="fa-solid fa-pen text-[#8696a0] text-sm"></i>
+                </div>
+            </div>
+
+            <button id="save-settings-btn" onclick="saveProfileSettings()" class="w-full bg-[#00a884] hover:bg-[#029071] py-3 rounded-lg text-[#111b21] font-bold transition-colors flex items-center justify-center gap-2 text-[16px]">
+                <i class="fa-solid fa-check"></i> Save
+            </button>
+        </div>
+    </div>
+
+    <div id="app-container" class="hidden absolute top-0 left-0 w-full mx-auto md:py-0 md:px-0" style="height: 100%;">
+        <div class="w-full h-full flex bg-[#111b21] overflow-hidden relative">
+            
+            <div id="sidebar" class="w-full md:w-[400px] flex flex-col border-r border-[#222d34] bg-[#111b21] z-20 flex-shrink-0 absolute md:relative inset-0 md:inset-auto slide-in-anim">
+                
+                <header class="p-3 bg-[#111b21] flex items-center justify-between shrink-0 h-[64px]" style="padding-top: max(0.75rem, env(safe-area-inset-top));">
+                    <div class="flex items-center gap-3">
+                        <img id="my-avatar" src="" onclick="openSettings()" class="w-9 h-9 rounded-full object-cover cursor-pointer hover:opacity-80 transition-opacity bg-[#202c33]" title="Profile Settings">
+                        <h1 class="text-white text-[21px] font-bold tracking-wide cursor-default">Ras<span class="text-[#00a884]">Gram</span></h1>
+                    </div>
+                    <div class="flex items-center gap-4 text-[#aebac1] text-[18px]">
+                        <button title="Camera" class="hover:text-white transition-colors"><i class="fa-solid fa-camera"></i></button>
+                        <div class="relative">
+                            <button onclick="toggleSidebarMenu(event)" class="px-2 hover:text-white transition-colors"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            <div id="sidebar-dropdown" class="dropdown-menu absolute top-full right-0 mt-2 w-56 bg-[#233138] rounded-md shadow-xl py-2 z-50 border border-[#222d34]">
+                                <button onclick="openGroupModal()" class="w-full text-left px-5 py-3 text-[16px] text-[#d1d7db] hover:bg-[#111b21] transition-colors flex items-center gap-3 font-medium">
+                                    <i class="fa-solid fa-users w-5 text-center text-[#8696a0]"></i> New Group
+                                </button>
+                                <button onclick="openSettings()" class="w-full text-left px-5 py-3 text-[16px] text-[#d1d7db] hover:bg-[#111b21] transition-colors flex items-center gap-3 font-medium">
+                                    <i class="fa-solid fa-gear w-5 text-center text-[#8696a0]"></i> Settings
+                                </button>
+                                <button onclick="toggleTheme()" class="w-full text-left px-5 py-3 text-[16px] text-[#d1d7db] hover:bg-[#111b21] transition-colors flex items-center gap-3 font-medium border-t border-[#222d34]">
+                                    <i id="theme-icon" class="fa-solid fa-sun w-5 text-center text-[#8696a0]"></i> <span id="theme-text">Light Mode</span>
+                                </button>
+                                <button onclick="toggleActiveStatus()" class="w-full text-left px-5 py-3 text-[16px] text-[#d1d7db] hover:bg-[#111b21] transition-colors flex items-center gap-3 font-medium border-t border-[#222d34]">
+                                    <i id="status-icon" class="fa-solid fa-eye-slash w-5 text-center text-[#8696a0]"></i> <span id="status-toggle-text">Turn off Active Status</span>
+                                </button>
+                                <button onclick="openLockedChats()" class="w-full text-left px-5 py-3 text-[16px] text-[#d1d7db] hover:bg-[#111b21] transition-colors flex items-center gap-3 font-medium border-t border-[#222d34]">
+                                    <i class="fa-solid fa-lock w-5 text-center text-[#00a884]"></i> Locked chats
+                                </button>
+                                <button onclick="logoutPvtChat()" class="w-full text-left px-5 py-3 text-[16px] text-[#f15c6d] hover:bg-[#111b21] transition-colors flex items-center gap-3 font-medium border-t border-[#222d34]">
+                                    <i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Log out
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="px-2 pb-2 border-b border-[#222d34] bg-[#111b21] shrink-0">
+                    <div class="bg-[#202c33] rounded-full flex items-center px-4 py-1.5 focus-within:bg-[#111b21] border border-transparent focus-within:border-[#00a884]/50 transition-colors">
+                        <i class="fa-solid fa-magnifying-glass text-[#8696a0] text-[15px]"></i>
+                        <input type="text" id="search-input" placeholder="Search or start new chat" class="bg-transparent border-none outline-none text-white text-[16px] w-full ml-4 placeholder-[#8696a0] font-medium py-1">
+                    </div>
+                </div>
+
+                <div id="locked-indicator" class="hidden px-4 py-3.5 border-b border-[#222d34] flex items-center gap-4 cursor-pointer hover:bg-[#202c33] transition-colors" onclick="openLockedChats()">
+                    <div class="w-11 h-11 rounded-full bg-[#00a884]/10 text-[#00a884] flex items-center justify-center text-lg"><i class="fa-solid fa-lock"></i></div>
+                    <span class="text-white font-semibold text-[17px]">Locked chats</span>
+                </div>
+
+                <div id="locked-header-bar" class="hidden px-4 py-3.5 bg-[#202c33] border-b border-[#222d34] flex items-center justify-between shadow-sm z-10">
+                    <div class="flex items-center gap-3 cursor-pointer text-[#00a884] font-medium hover:text-white transition-colors text-[17px]" onclick="closeLockedChats()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Locked Chats</span>
+                    </div>
+                    <button onclick="openAddLockModal()" class="w-9 h-9 rounded-full bg-[#00a884]/20 text-[#00a884] hover:bg-[#00a884] hover:text-[#111b21] flex items-center justify-center transition-colors text-lg" title="Add chats to lock">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                </div>
+
+                <div id="contacts-list" class="flex-grow overflow-y-auto custom-scroll relative bg-[#111b21]" style="touch-action: pan-y;">
+                    <div id="contacts-container">
+                        <div class="text-center text-[#8696a0] p-6 text-sm"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="chat-area" class="w-full hidden flex-col relative h-full bg-[#222d34]">
+                
+                <div id="empty-chat-state" class="absolute inset-0 z-40 flex flex-col items-center justify-center bg-[#222d34] border-l border-[#222d34] fade-in-anim">
+                    <div class="w-32 h-32 bg-[#202c33] rounded-full flex items-center justify-center mb-8 shadow-xl">
+                        <i class="fa-solid fa-paper-plane text-[4.5rem] text-[#00a884] -ml-2 mt-2"></i>
+                    </div>
+                    <h2 class="text-4xl font-light text-white mb-4">RasGram Web</h2>
+                    <p class="text-[#8696a0] text-[16px] max-w-md text-center px-4 font-medium leading-relaxed">Send and receive messages securely.<br>End-to-end encrypted connection active.</p>
+                    <div class="absolute bottom-10 flex items-center gap-2 text-[#8696a0] text-sm font-medium">
+                        <i class="fa-solid fa-lock text-[#00a884]"></i> End-to-end encrypted
+                    </div>
+                </div>
+
+                <header class="p-2 md:p-3 bg-[#202c33] flex items-center justify-between shrink-0 h-[64px] relative z-30 border-l border-[#222d34]" style="padding-top: max(0.5rem, env(safe-area-inset-top));">
+                    <div class="flex items-center gap-4">
+                        <button onclick="closeChatMobile()" class="md:hidden w-10 h-10 flex items-center justify-center rounded-full text-[#aebac1] hover:bg-[#111b21] transition-colors shrink-0 text-xl">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <div class="flex items-center gap-4 cursor-pointer">
+                            <img id="active-chat-avatar" src="" class="w-10 h-10 rounded-full object-cover bg-[#111b21]">
+                            <div class="flex flex-col justify-center">
+                                <h2 id="active-chat-name" class="font-bold text-white text-[17.5px] leading-tight tracking-[0.3px]">Contact</h2>
+                                <p id="active-chat-status" class="text-[13px] text-[#8696a0] mt-0.5">...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-5 text-[#aebac1] pr-2 text-[18px]">
+                        <button onclick="startCall('video')" class="hover:text-white transition-colors" title="Video Call"><i class="fa-solid fa-video"></i></button>
+                        <button onclick="startCall('audio')" class="hover:text-white transition-colors" title="Voice Call"><i class="fa-solid fa-phone"></i></button>
+                        
+                        <div class="w-[1px] h-6 bg-[#374045] mx-1 hidden md:block"></div>
+                        
+                        <div class="relative">
+                            <button onclick="toggleChatMenu(event)" class="px-2 hover:text-white transition-colors"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            <div id="chat-dropdown" class="dropdown-menu absolute top-full right-0 mt-2 bg-[#233138] border border-[#222d34] rounded-md shadow-xl py-2 w-52 z-50 overflow-hidden">
+                                <button onclick="toggleLockCurrentChat(event)" id="lock-chat-btn" class="w-full text-left px-5 py-3 text-[16px] text-[#d1d7db] hover:bg-[#111b21] transition-colors font-medium">Lock chat</button>
+                                <button onclick="clearEntireChat()" class="w-full text-left px-5 py-3 text-[16px] text-[#f15c6d] hover:bg-[#111b21] transition-colors flex items-center gap-3 font-medium">
+                                    <i class="fa-solid fa-trash-can w-5 text-center"></i> Clear chat
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <main id="messages-box" class="flex-grow chat-bg overflow-y-auto p-4 md:p-6 flex flex-col gap-1 custom-scroll relative z-20" onclick="closeAllMenus()" style="touch-action: pan-y;">
+                    <div class="text-center my-3">
+                        <span class="bg-[#182229] text-[#ffd279] text-[12.5px] px-4 py-2 rounded-lg shadow-sm inline-block font-medium border border-[#222d34]">
+                            <i class="fa-solid fa-lock text-[11px] mr-1"></i> Messages are end-to-end encrypted.
+                        </span>
+                    </div>
+                </main>
+
+                <footer class="bg-[#202c33] px-3 py-2 flex flex-col shrink-0 z-30 relative" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom));">
+                    
+                    <div id="file-preview-container" class="hidden w-full px-2 mb-2">
+                        <div class="bg-[#111b21] border border-[#222d34] rounded-xl p-3 flex items-center justify-between">
+                            <div class="flex items-center gap-4 overflow-hidden">
+                                <div id="preview-icon-wrapper" class="w-14 h-14 rounded-lg bg-[#202c33] text-[#00a884] flex items-center justify-center shrink-0 border border-[#222d34] overflow-hidden relative">
+                                    <i id="preview-icon" class="fa-solid fa-file text-2xl"></i>
+                                    <img id="preview-img" src="" class="hidden w-full h-full object-cover absolute inset-0">
+                                </div>
+                                <div class="overflow-hidden">
+                                    <p id="file-preview-name" class="text-[15px] font-medium text-white truncate w-48 md:w-72">filename</p>
+                                    <p id="file-preview-size" class="text-[13px] text-[#8696a0] mt-0.5">0 MB</p>
+                                </div>
+                            </div>
+                            <button type="button" onclick="clearFile()" class="text-[#8696a0] hover:text-[#f15c6d] w-12 h-12 flex items-center justify-center rounded-full transition-colors hover:bg-[#202c33]">
+                                <i class="fa-solid fa-xmark text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="recording-ui" class="hidden flex items-center justify-between bg-[#111b21] rounded-lg p-2 mb-2 border border-[#f15c6d]/30">
+                        <div class="flex items-center gap-3 text-[#f15c6d] pl-4 font-bold text-[16px] animate-pulse">
+                            <i class="fa-solid fa-microphone-lines text-xl"></i> Recording...
+                        </div>
+                        <div class="flex gap-3">
+                            <button type="button" onclick="cancelRecording()" class="w-11 h-11 rounded-full text-[#8696a0] hover:text-[#f15c6d] hover:bg-[#202c33] flex items-center justify-center transition-colors text-lg">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                            <button type="button" onclick="stopAndSendRecording()" class="w-11 h-11 rounded-full bg-[#00a884] text-[#111b21] hover:bg-[#029071] flex items-center justify-center transition-colors text-lg">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <form id="chat-form" class="flex items-end gap-2 w-full relative min-h-[48px]">
+                        <button type="button" onclick="document.getElementById('file-input').click()" class="w-11 h-11 shrink-0 text-[#8696a0] hover:text-white flex items-center justify-center transition-colors mb-0.5">
+                            <i class="fa-solid fa-paperclip text-[22px]"></i>
+                        </button>
+                        <input type="file" id="file-input" class="hidden">
+
+                        <div class="flex-grow bg-[#2a3942] rounded-xl flex items-center px-4 py-2 transition-all">
+                            <textarea id="msg-input" rows="1" placeholder="Type a message"
+                                class="w-full bg-transparent text-white focus:outline-none resize-none max-h-32 custom-scroll text-[16px] placeholder-[#8696a0] leading-snug" style="min-height: 24px; padding-top: 4px;"></textarea>
+                        </div>
+                        
+                        <button type="button" id="mic-btn" onclick="startRecording()" class="w-11 h-11 shrink-0 text-[#8696a0] hover:text-white flex items-center justify-center transition-colors mb-0.5">
+                            <i class="fa-solid fa-microphone text-[22px]"></i>
+                        </button>
+                        
+                        <button type="submit" id="send-btn" class="hidden w-11 h-11 shrink-0 text-[#8696a0] hover:text-[#00a884] flex items-center justify-center transition-colors mb-0.5">
+                            <i class="fa-solid fa-paper-plane text-[22px] ml-1"></i>
+                        </button>
+                    </form>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <div id="call-modal" class="hidden fixed inset-0 z-[300] bg-slate-950 overflow-hidden flex-col fade-in-anim">
+        <audio id="remote-audio" autoplay playsinline></audio>
+        <video id="remote-video" autoplay playsinline class="absolute inset-0 w-full h-full object-cover hidden z-0 bg-black"></video>
+        <video id="local-video" autoplay playsinline muted class="absolute top-12 right-4 md:top-8 md:right-8 w-28 h-40 md:w-40 md:h-56 bg-slate-800 rounded-2xl border-2 border-white/20 object-cover hidden z-20 shadow-2xl"></video>
+
+        <div id="call-overlay" class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-950/90 backdrop-blur-xl transition-opacity duration-500">
+            <div class="relative mb-8">
+                <img id="call-avatar" src="" class="w-32 h-32 rounded-full object-cover z-10 relative border-4 border-[#00a884] shadow-2xl">
+                <div class="absolute inset-0 border-4 border-[#00a884] rounded-full animate-ping opacity-40 z-0"></div>
+            </div>
+            <h2 id="call-name" class="text-3xl font-bold text-white mb-2">Caller Name</h2>
+            <p id="call-status" class="text-[#00a884] text-[18px] font-bold tracking-wide uppercase mb-12">Calling...</p>
+        </div>
+        
+        <div class="absolute bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 flex items-center justify-center gap-8 z-30 w-full px-4">
+            <button id="answer-btn" onclick="answerCall()" class="hidden w-16 h-16 rounded-full bg-[#00a884] text-white text-2xl hover:scale-110 transition-all flex items-center justify-center">
+                <i class="fa-solid fa-phone"></i>
+            </button>
+
+            <div id="in-call-controls" class="hidden flex items-center gap-4 bg-white/10 backdrop-blur-lg p-3 rounded-full border border-white/20">
+                <button id="mic-toggle-btn" onclick="toggleMic()" class="w-14 h-14 rounded-full bg-white/20 text-white text-xl hover:bg-white/30 transition-colors">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <button id="cam-toggle-btn" onclick="toggleCamera()" class="w-14 h-14 rounded-full bg-white/20 text-white text-xl hover:bg-white/30 transition-colors hidden">
+                    <i class="fa-solid fa-video"></i>
+                </button>
+                <div class="w-[1px] h-10 bg-white/20 mx-2"></div>
+                <button id="hangup-btn" onclick="hangupCallAction()" class="w-16 h-16 rounded-full bg-[#f15c6d] text-white text-2xl hover:scale-110 transition-all flex items-center justify-center">
+                    <i class="fa-solid fa-phone-slash"></i>
+                </button>
+            </div>
+            
+            <button id="caller-hangup-btn" onclick="hangupCallAction()" class="hidden w-16 h-16 rounded-full bg-[#f15c6d] text-white text-2xl hover:scale-110 transition-all flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, deleteDoc, updateDoc, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        import { setupWebRTC } from "./webrtc_core.js";
+
+        // --- Dexie.js (Offline Database) Setup ---
+        const localDB = new Dexie("RasGramDB");
+        localDB.version(2).stores({
+            chatHistory: 'chatId, messages',
+            outbox: '++id, chatId, text, senderMobile, timestamp, timeString, fileUrl, fileName, fileType, reaction, read, isPending'
+        });
+
+        // --- Service Worker Register for PWA ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker registered!', reg))
+                .catch(err => console.error('Service Worker failed!', err));
+            });
+        }
+
+        function setRealViewportHeight() {
+            let vh = window.innerHeight;
+            if (window.visualViewport) vh = window.visualViewport.height;
+            document.body.style.height = vh + 'px';
+            document.documentElement.style.height = vh + 'px';
+            const appContainer = document.getElementById('app-container');
+            if (appContainer) appContainer.style.height = vh + 'px';
+            const msgBox = document.getElementById('messages-box');
+            if(msgBox) setTimeout(() => msgBox.scrollTop = msgBox.scrollHeight, 50);
+        }
+        window.addEventListener('resize', setRealViewportHeight);
+        if (window.visualViewport) window.visualViewport.addEventListener('resize', setRealViewportHeight);
+        setRealViewportHeight();
+
+        // ☀️ Theme Logic ☀️
+        let isLightMode = localStorage.getItem('theme') === 'light';
+        function applyTheme() {
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            if (isLightMode) {
+                document.body.classList.add('light-mode');
+                if(icon) icon.className = "fa-solid fa-moon w-5 text-center text-[#8696a0]";
+                if(text) text.innerText = "Dark Mode";
+            } else {
+                document.body.classList.remove('light-mode');
+                if(icon) icon.className = "fa-solid fa-sun w-5 text-center text-[#8696a0]";
+                if(text) text.innerText = "Light Mode";
+            }
+        }
+        window.toggleTheme = () => {
+            isLightMode = !isLightMode;
+            localStorage.setItem('theme', isLightMode ? 'light' : 'dark');
+            applyTheme();
+            closeAllMenus();
+        };
+        applyTheme();
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGd3KAo45UuqmeGFALziz_oKm3htEASHY",
+            authDomain: "mywebtools-f8d53.firebaseapp.com",
+            projectId: "mywebtools-f8d53",
+            storageBucket: "mywebtools-f8d53.firebasestorage.app",
+            messagingSenderId: "979594414301",
+            appId: "1:979594414301:web:7048c995e56e331a85f334"
+        };
+        
+        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/de2w78yxh/auto/upload"; 
+        const CLOUDINARY_UPLOAD_PRESET = "ml_default"; 
+        const SYNC_APP_ID = "rasel-mia-universal-sync";
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let myName = localStorage.getItem('pvt_chat_name') || '';
+        let myMobile = localStorage.getItem('pvt_chat_mobile') || '';
+        let myAvatarUrl = localStorage.getItem('pvt_chat_avatar') || ''; 
+        let myPassword = localStorage.getItem('pvt_chat_password') || ''; 
+        
+        let isStatusVisible = localStorage.getItem('status_visible') !== 'false';
+        
+        let activeContactMobile = null;
+        let allUsers = [];
+        let latestMessages = {}; 
+        let chatListeners = {};  
+
+        let lockedContacts = JSON.parse(localStorage.getItem('locked_contacts') || '[]');
+        let userPin = localStorage.getItem('nexus_pin') || null;
+        let isViewingLocked = false;
+
+        let currentChatUnsubscribe = null;
+        let userStatusUnsubscribe = null;
+        let activeTrackingInterval = null;
+        let selectedFile = null;
+        let typingTimeout = null; 
+        let isTyping = false; 
+
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+        let settingsSelectedFile = null;
+
+        let callTimerInterval = null;
+        let callSeconds = 0;
+        let currentCallType = 'voice';
+
+        const remoteAudioElem = document.getElementById('remote-audio');
+        const remoteVideoElem = document.getElementById('remote-video');
+        
+        function startLiveCallTimer() {
+            clearInterval(callTimerInterval);
+            callSeconds = 0;
+            const statusElem = document.getElementById('call-status');
+            statusElem.innerText = "0:00";
+            callTimerInterval = setInterval(() => {
+                callSeconds++;
+                statusElem.innerText = formatTime(callSeconds);
+            }, 1000);
+        }
+
+        remoteAudioElem.addEventListener('playing', startLiveCallTimer);
+        remoteVideoElem.addEventListener('playing', startLiveCallTimer);
+
+        window.hangupCallAction = () => {
+            clearInterval(callTimerInterval);
+            if(callSeconds === 0 && activeContactMobile) {
+                const status = document.getElementById('call-status').innerText.toLowerCase();
+                const isRinging = status.includes('calling') || status.includes('ringing');
+                if(isRinging) {
+                    addDoc(collection(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${generateChatId(myMobile, activeContactMobile)}`), {
+                        text: `Missed ${currentCallType} call`, senderMobile: myMobile, timestamp: Date.now(),
+                        timeString: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                        isCallLog: true, callStatus: 'missed', callType: currentCallType, read: false 
+                    }).catch(e=>{});
+                }
+            }
+            callSeconds = 0;
+            if(typeof window.hangupCall === 'function') window.hangupCall();
+        }
+
+        const originalStartCall = window.startCall;
+        window.startCall = (type) => { currentCallType = type; if(typeof originalStartCall === 'function') originalStartCall(type); }
+
+        const appStartTime = Date.now();
+
+        setupWebRTC(
+            db, SYNC_APP_ID, 
+            () => myMobile, () => activeContactMobile, () => allUsers
+        );
+
+        const joinModal = document.getElementById('join-modal');
+        const unlockModal = document.getElementById('unlock-modal');
+        const appContainer = document.getElementById('app-container');
+        const contactsContainer = document.getElementById('contacts-container');
+        const searchInput = document.getElementById('search-input');
+        const msgBox = document.getElementById('messages-box');
+        const chatForm = document.getElementById('chat-form');
+        const msgInput = document.getElementById('msg-input');
+        const sendBtn = document.getElementById('send-btn');
+        const micBtn = document.getElementById('mic-btn');
+        const fileInput = document.getElementById('file-input');
+        const previewIcon = document.getElementById('preview-icon');
+        const previewImg = document.getElementById('preview-img');
+
+        function getAvatarUrl(name, customUrl) { return customUrl ? customUrl : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=8696a0&color=fff&bold=true`; }
+        function formatTime(seconds) {
+            if(!seconds || isNaN(seconds)) return "0:00";
+            const m = Math.floor(seconds / 60); const s = Math.floor(seconds % 60); return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        if (myName && myMobile && myPassword) {
+            startApp();
+        } else {
+            joinModal.classList.remove('hidden');
+        }
+
+        document.getElementById('join-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const n = document.getElementById('reg-name').value.trim(); 
+            const m = document.getElementById('reg-mobile').value.trim();
+            const p = document.getElementById('reg-password').value.trim();
+            const joinBtn = document.getElementById('join-btn');
+
+            if (n && m.length === 11 && p.length >= 4) {
+                const originalText = joinBtn.innerHTML; joinBtn.disabled = true; joinBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
+                try {
+                    await signInAnonymously(auth);
+                    const userRef = doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', m);
+                    const userSnap = await getDoc(userRef);
+                    
+                    if (userSnap.exists()) {
+                        const dbData = userSnap.data();
+                        if (!dbData.password) {
+                            await updateDoc(userRef, { password: p, name: n }); 
+                        } else if (dbData.password !== p) { 
+                            alert("Wrong password for this mobile number."); 
+                            joinBtn.disabled = false; joinBtn.innerHTML = originalText; return; 
+                        }
+                        if(dbData.avatarUrl) { myAvatarUrl = dbData.avatarUrl; localStorage.setItem('pvt_chat_avatar', myAvatarUrl); }
+                    } else { 
+                        await setDoc(userRef, { name: n, mobile: m, password: p, lastActive: Date.now(), typingTo: null, avatarUrl: '', statusVisible: true }); 
+                    }
+                    
+                    myName = n; myMobile = m; myPassword = p;
+                    localStorage.setItem('pvt_chat_name', n); localStorage.setItem('pvt_chat_mobile', m); localStorage.setItem('pvt_chat_password', p);
+                    joinModal.classList.add('hidden'); startApp();
+                } catch (err) { alert("Connection error! " + err.message); joinBtn.disabled = false; joinBtn.innerHTML = originalText; }
+            } else alert("Please fill all details correctly.");
+        };
+
+        function sendPushNotification(title, body) {
+            if (!("Notification" in window)) return;
+            if (Notification.permission === "granted" && document.visibilityState !== "visible") {
+                const notif = new Notification(title, {
+                    body: body,
+                    icon: 'https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg',
+                    vibrate: [200, 100, 200]
+                });
+                notif.onclick = () => { window.focus(); notif.close(); };
+            }
+        }
+
+        function updateStatusUI() {
+            const icon = document.getElementById('status-icon');
+            const text = document.getElementById('status-toggle-text');
+            if(isStatusVisible) {
+                icon.className = "fa-solid fa-eye-slash w-5 text-center text-[#8696a0]";
+                text.innerText = "Turn off Active Status";
+            } else {
+                icon.className = "fa-solid fa-eye w-5 text-center text-[#00a884]";
+                text.innerText = "Turn on Active Status";
+            }
+        }
+        
+        window.toggleActiveStatus = async () => {
+            isStatusVisible = !isStatusVisible;
+            localStorage.setItem('status_visible', isStatusVisible);
+            updateStatusUI();
+            closeAllMenus();
+            try { await setDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', myMobile), { statusVisible: isStatusVisible }, { merge: true }); } catch(e){}
+        }
+
+        window.openLightbox = (url, e) => {
+            e.stopPropagation(); const lightbox = document.getElementById('image-lightbox'); const img = document.getElementById('lightbox-img');
+            img.src = url; img.classList.remove('scale-150', 'cursor-zoom-out'); img.classList.add('scale-95', 'cursor-zoom-in');
+            lightbox.classList.remove('hidden'); setTimeout(() => { lightbox.classList.remove('opacity-0'); img.classList.remove('scale-95'); img.classList.add('scale-100'); }, 10);
+        };
+        window.closeLightbox = () => {
+            const lightbox = document.getElementById('image-lightbox'); const img = document.getElementById('lightbox-img');
+            lightbox.classList.add('opacity-0'); img.classList.remove('scale-100', 'scale-150'); img.classList.add('scale-95');
+            setTimeout(() => lightbox.classList.add('hidden'), 300);
+        };
+
+        window.toggleChatMenu = (e) => { e.stopPropagation(); closeAllMenus(); document.getElementById('chat-dropdown').classList.toggle('show'); }
+        window.toggleSidebarMenu = (e) => { e.stopPropagation(); closeAllMenus(); document.getElementById('sidebar-dropdown').classList.toggle('show'); }
+        window.toggleContactMenu = (mobile, e) => { e.stopPropagation(); const menu = document.getElementById(`contact-menu-${mobile}`); const isHidden = !menu.classList.contains('show'); closeAllMenus(); if(isHidden) menu.classList.add('show'); }
+        window.closeAllMenus = () => { document.querySelectorAll('.dropdown-menu').forEach(el => el.classList.remove('show')); document.querySelectorAll('.reaction-menu-popup').forEach(el => el.classList.add('hidden')); }
+        document.body.addEventListener('click', closeAllMenus);
+
+        window.logoutPvtChat = () => { if(confirm("Are you sure you want to log out?")) { localStorage.clear(); location.reload(); } };
+
+        window.openGroupModal = () => { closeAllMenus(); document.getElementById('group-modal').classList.remove('hidden'); renderGroupContacts(); }
+        window.closeGroupModal = () => document.getElementById('group-modal').classList.add('hidden');
+        window.renderGroupContacts = () => {
+            const list = document.getElementById('group-contact-list'); list.innerHTML = '';
+            allUsers.forEach(u => {
+                const avatar = getAvatarUrl(u.name, u.avatarUrl);
+                list.innerHTML += `<label class="flex items-center gap-4 p-3 hover:bg-[#111b21] cursor-pointer rounded-lg transition-colors border-b border-[#222d34]">
+                    <input type="checkbox" value="${u.mobile}" class="group-checkbox w-5 h-5 accent-[#00a884] bg-transparent border border-[#8696a0]">
+                    <img src="${avatar}" class="w-11 h-11 rounded-full object-cover">
+                    <span class="text-white font-medium text-[16px]">${u.name}</span></label>`;
+            });
+        }
+        window.createGroup = () => {
+            const name = document.getElementById('group-name').value.trim(); const selected = Array.from(document.querySelectorAll('.group-checkbox:checked')).map(cb => cb.value);
+            if(!name || selected.length === 0) return alert("Enter group name and select at least 1 contact.");
+            alert(`Group '${name}' created successfully with ${selected.length} members!`); closeGroupModal();
+        }
+
+        window.openLockedChats = () => {
+            closeAllMenus(); document.getElementById('pin-input').value = "";
+            if(!userPin) { document.getElementById('pin-title').innerText = "Create a PIN"; document.getElementById('pin-desc').innerText = "Set a 4-digit PIN for locked chats."; document.getElementById('pin-action-btn').innerText = "Set PIN"; } 
+            else { document.getElementById('pin-title').innerText = "Enter PIN"; document.getElementById('pin-desc').innerText = "Unlock your secure chats."; document.getElementById('pin-action-btn').innerText = "Unlock"; }
+            document.getElementById('pin-modal').classList.remove('hidden'); setTimeout(() => document.getElementById('pin-input').focus(), 100);
+        }
+        window.handlePinAction = () => {
+            const input = document.getElementById('pin-input').value;
+            if(input.length < 4) return alert("Please enter exactly 4 digits!");
+            if(!userPin) { userPin = input; localStorage.setItem('nexus_pin', userPin); alert("PIN set successfully!"); document.getElementById('pin-modal').classList.add('hidden'); enterLockedView(); } 
+            else { if(input === userPin) { document.getElementById('pin-modal').classList.add('hidden'); enterLockedView(); } else { alert("Incorrect PIN!"); document.getElementById('pin-input').value = ''; } }
+        }
+        window.closePinModal = () => document.getElementById('pin-modal').classList.add('hidden');
+
+        function enterLockedView() { isViewingLocked = true; document.getElementById('locked-header-bar').classList.remove('hidden'); document.getElementById('locked-indicator').classList.add('hidden'); renderContacts(); }
+        window.closeLockedChats = () => { isViewingLocked = false; document.getElementById('locked-header-bar').classList.add('hidden'); renderContacts(); closeChatMobile(); }
+
+        window.openAddLockModal = () => {
+            const list = document.getElementById('unlocked-contact-list'); list.innerHTML = ''; const unlockedUsers = allUsers.filter(u => !lockedContacts.includes(u.mobile));
+            if(unlockedUsers.length === 0) { list.innerHTML = `<p class="text-center text-[#8696a0] p-4 text-[16px]">No available chats to lock.</p>`; } 
+            else {
+                unlockedUsers.forEach(u => {
+                    const avatar = getAvatarUrl(u.name, u.avatarUrl);
+                    list.innerHTML += `<label class="flex items-center gap-4 p-3 hover:bg-[#111b21] cursor-pointer rounded-lg border-b border-[#222d34]">
+                        <input type="checkbox" value="${u.mobile}" class="lock-checkbox w-5 h-5 accent-[#00a884]">
+                        <img src="${avatar}" class="w-11 h-11 rounded-full object-cover">
+                        <span class="text-white font-medium text-[16px]">${u.name}</span></label>`;
+                });
+            }
+            document.getElementById('add-lock-modal').classList.remove('hidden');
+        }
+        window.closeAddLockModal = () => document.getElementById('add-lock-modal').classList.add('hidden');
+        window.addSelectedToLock = () => { const selected = Array.from(document.querySelectorAll('.lock-checkbox:checked')).map(cb => cb.value); if(selected.length > 0) { lockedContacts.push(...selected); localStorage.setItem('locked_contacts', JSON.stringify(lockedContacts)); renderContacts(); } closeAddLockModal(); }
+
+        window.toggleLockContact = (mobile, e) => {
+            if(e) e.stopPropagation(); closeAllMenus();
+            if(!userPin) { userPin = prompt("Set a 4-digit PIN first to lock chats:"); if(userPin && userPin.length >= 4) { localStorage.setItem('nexus_pin', userPin); } else { return; } }
+            if(lockedContacts.includes(mobile)) lockedContacts = lockedContacts.filter(m => m !== mobile); else lockedContacts.push(mobile);
+            localStorage.setItem('locked_contacts', JSON.stringify(lockedContacts));
+            if (activeContactMobile === mobile) { if ((!isViewingLocked && lockedContacts.includes(mobile)) || (isViewingLocked && !lockedContacts.includes(mobile))) closeChatMobile(); else renderContacts(); } else renderContacts();
+        }
+        window.toggleLockCurrentChat = (e) => toggleLockContact(activeContactMobile, e);
+
+        window.openSettings = () => { document.getElementById('settings-modal').classList.remove('hidden'); document.getElementById('settings-avatar-preview').src = getAvatarUrl(myName, myAvatarUrl); document.getElementById('settings-name-input').value = myName; settingsSelectedFile = null; }
+        window.closeSettings = () => { document.getElementById('settings-modal').classList.add('hidden'); document.getElementById('profile-pic-input').value = ''; }
+        window.previewProfilePic = (event) => { const file = event.target.files[0]; if(file && file.type.startsWith('image/')) { if(file.size > 5 * 1024 * 1024) return alert("Max size 5MB allowed"); settingsSelectedFile = file; const reader = new FileReader(); reader.onload = (e) => document.getElementById('settings-avatar-preview').src = e.target.result; reader.readAsDataURL(file); } }
+        window.saveProfileSettings = async () => {
+            const newName = document.getElementById('settings-name-input').value.trim(); if(!newName) return alert("Name cannot be empty");
+            const saveBtn = document.getElementById('save-settings-btn'); const originalText = saveBtn.innerHTML; saveBtn.disabled = true; saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+            try {
+                let updatedAvatarUrl = myAvatarUrl;
+                if(settingsSelectedFile) {
+                    const formData = new FormData(); formData.append('file', settingsSelectedFile); formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                    const response = await fetch(CLOUDINARY_URL, { method: 'POST', body: formData }); const uploadResult = await response.json();
+                    if(uploadResult.secure_url) updatedAvatarUrl = uploadResult.secure_url; else throw new Error("Failed");
+                }
+                await setDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', myMobile), { name: newName, avatarUrl: updatedAvatarUrl }, { merge: true });
+                myName = newName; myAvatarUrl = updatedAvatarUrl; localStorage.setItem('pvt_chat_name', newName); localStorage.setItem('pvt_chat_avatar', updatedAvatarUrl);
+                document.getElementById('my-avatar').src = getAvatarUrl(newName, updatedAvatarUrl);
+                saveBtn.innerHTML = '<i class="fa-solid fa-check"></i> Saved!'; setTimeout(() => { closeSettings(); saveBtn.innerHTML = originalText; saveBtn.disabled = false; }, 1000);
+            } catch(e) { alert("Upload failed."); saveBtn.innerHTML = originalText; saveBtn.disabled = false; }
+        }
+
+        window.clearEntireChat = async () => {
+            closeAllMenus();
+            if(confirm("Delete entire chat history?")) {
+                try {
+                    const chatId = generateChatId(myMobile, activeContactMobile); const msgRef = collection(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${chatId}`);
+                    const q = query(msgRef, limit(100)); const querySnapshot = await getDocs(q);
+                    querySnapshot.forEach((document) => { deleteDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${chatId}`, document.id)); });
+                    document.querySelectorAll('.pvt-msg').forEach(e => e.remove());
+                } catch(e) {}
+            }
+        }
+
+        function toggleInputButtons() {
+            const hasText = msgInput.value.trim().length > 0; const hasFile = !!selectedFile;
+            if (hasText || hasFile) { micBtn.classList.add('hidden'); sendBtn.classList.remove('hidden'); sendBtn.disabled = false; } 
+            else { micBtn.classList.remove('hidden'); sendBtn.classList.add('hidden'); }
+        }
+
+        msgInput.addEventListener('focus', () => { setTimeout(() => setRealViewportHeight(), 150); });
+        
+        msgInput.addEventListener('input', function() {
+            this.style.height = 'auto'; 
+            this.style.height = (this.scrollHeight < 100 ? this.scrollHeight : 100) + 'px'; 
+            toggleInputButtons();
+            
+            if (activeContactMobile) {
+                if (!isTyping) {
+                    isTyping = true;
+                    setDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', myMobile), { typingTo: activeContactMobile }, { merge: true });
+                }
+                
+                clearTimeout(typingTimeout);
+                typingTimeout = setTimeout(() => {
+                    isTyping = false;
+                    setDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', myMobile), { typingTo: null }, { merge: true });
+                }, 2000);
+            }
+        });
+        
+        msgInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if(!sendBtn.disabled) chatForm.dispatchEvent(new Event('submit')); } });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 30 * 1024 * 1024) return alert("File size limit 30MB");
+                selectedFile = file; document.getElementById('file-preview-name').innerText = file.name; document.getElementById('file-preview-size').innerText = (file.size / 1024 / 1024).toFixed(2) + " MB";
+                previewIcon.className = "hidden"; previewImg.classList.add("hidden");
+                if(file.type.startsWith('image/')) {
+                    const reader = new FileReader(); reader.onload = (e) => { previewImg.src = e.target.result; previewImg.classList.remove('hidden'); }; reader.readAsDataURL(file);
+                } else {
+                    previewIcon.className = "fa-solid text-3xl";
+                    if(file.type.startsWith('video/')) previewIcon.classList.add("fa-video", "text-[#00a884]");
+                    else if(file.type.startsWith('audio/')) previewIcon.classList.add("fa-headphones", "text-[#53bdeb]");
+                    else previewIcon.classList.add("fa-file", "text-[#8696a0]");
+                }
+                document.getElementById('file-preview-container').classList.remove('hidden'); toggleInputButtons();
+            }
+        });
+        window.clearFile = () => { selectedFile = null; fileInput.value = ''; document.getElementById('file-preview-container').classList.add('hidden'); previewImg.src = ''; toggleInputButtons(); };
+
+        window.startRecording = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); mediaRecorder = new MediaRecorder(stream); audioChunks = [];
+                mediaRecorder.addEventListener("dataavailable", event => { audioChunks.push(event.data); });
+                mediaRecorder.start(); isRecording = true; document.getElementById('recording-ui').classList.remove('hidden'); msgInput.parentElement.classList.add('hidden'); micBtn.classList.add('hidden'); 
+            } catch (err) { alert("Mic denied."); }
+        }
+        window.cancelRecording = () => { if(mediaRecorder && isRecording) mediaRecorder.stop(); isRecording = false; audioChunks = []; document.getElementById('recording-ui').classList.add('hidden'); msgInput.parentElement.classList.remove('hidden'); micBtn.classList.remove('hidden'); toggleInputButtons(); }
+        window.stopAndSendRecording = () => {
+            if(mediaRecorder && isRecording) {
+                mediaRecorder.addEventListener("stop", () => { const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' }); const audioFile = new File([audioBlob], `VoiceNote_${Date.now()}.mp3`, { type: 'audio/mp3' }); selectedFile = audioFile; chatForm.dispatchEvent(new Event('submit')); });
+                mediaRecorder.stop();
+            }
+            isRecording = false; document.getElementById('recording-ui').classList.add('hidden'); msgInput.parentElement.classList.remove('hidden'); micBtn.classList.remove('hidden');
+        }
+
+        function generateChatId(mob1, mob2) { return mob1 < mob2 ? `${mob1}_${mob2}` : `${mob2}_${mob1}`; }
+
+        async function startApp() {
+            if ("Notification" in window && Notification.permission === "default") {
+                Notification.requestPermission();
+            }
+
+            appContainer.classList.remove('hidden'); appContainer.classList.add('flex'); document.getElementById('my-avatar').src = getAvatarUrl(myName, myAvatarUrl);
+            updateStatusUI();
+
+            const cachedUsers = localStorage.getItem('cached_users');
+            if (cachedUsers) allUsers = JSON.parse(cachedUsers);
+            const cachedMsgs = localStorage.getItem('cached_latest_msgs');
+            if (cachedMsgs) latestMessages = JSON.parse(cachedMsgs);
+            if(allUsers.length > 0) renderContacts();
+
+            try {
+                await signInAnonymously(auth);
+                const myRef = doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', myMobile); const mySnap = await getDoc(myRef);
+                if(mySnap.exists()) {
+                    const d = mySnap.data();
+                    if(d.avatarUrl) { myAvatarUrl = d.avatarUrl; localStorage.setItem('pvt_chat_avatar', myAvatarUrl); document.getElementById('my-avatar').src = getAvatarUrl(myName, myAvatarUrl); }
+                    if(d.name && d.name !== myName) { myName = d.name; localStorage.setItem('pvt_chat_name', myName); }
+                }
+                const updateMyStatus = async () => { await setDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', myMobile), { name: myName, mobile: myMobile, lastActive: Date.now(), statusVisible: isStatusVisible }, { merge: true }); };
+                updateMyStatus(); activeTrackingInterval = setInterval(updateMyStatus, 60000); listenForUsers();
+                if(window.listenForIncomingCallsWebRTC) window.listenForIncomingCallsWebRTC();
+            } catch (err) {}
+        }
+
+        function listenForUsers() {
+            onSnapshot(collection(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users'), (snapshot) => {
+                allUsers = [];
+                snapshot.forEach(doc => { const data = doc.data(); if (data.mobile !== myMobile) { allUsers.push(data); setupLastMessageListener(data.mobile); } });
+                localStorage.setItem('cached_users', JSON.stringify(allUsers));
+                renderContacts();
+            });
+        }
+
+        function setupLastMessageListener(contactMobile) {
+            if (chatListeners[contactMobile]) return; 
+            const chatId = generateChatId(myMobile, contactMobile);
+            chatListeners[contactMobile] = onSnapshot(query(collection(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${chatId}`), orderBy('timestamp', 'desc'), limit(1)), (snapshot) => {
+                if (!snapshot.empty) {
+                    const newLatest = snapshot.docs[0].data(); const oldLatest = latestMessages[contactMobile];
+                    if (newLatest.senderMobile !== myMobile && (!oldLatest || newLatest.timestamp > oldLatest.timestamp) && newLatest.timestamp > appStartTime) { 
+                        try { document.getElementById('notification-sound').play(); } catch(e){} 
+                        const u = allUsers.find(x => x.mobile === contactMobile);
+                        const pushName = u ? u.name : 'RasGram';
+                        const pushBody = newLatest.isCallLog ? "Missed Call" : (newLatest.text || "Sent an attachment");
+                        sendPushNotification(pushName, pushBody);
+                    }
+                    latestMessages[contactMobile] = newLatest;
+                } else latestMessages[contactMobile] = null;
+                localStorage.setItem('cached_latest_msgs', JSON.stringify(latestMessages));
+                renderContacts();
+            });
+        }
+
+        function renderContacts() {
+            const term = searchInput.value.toLowerCase();
+            if(lockedContacts.length > 0 && !isViewingLocked) document.getElementById('locked-indicator').classList.remove('hidden');
+            else document.getElementById('locked-indicator').classList.add('hidden');
+
+            let displayUsers = allUsers.filter(u => isViewingLocked ? lockedContacts.includes(u.mobile) : !lockedContacts.includes(u.mobile));
+            displayUsers = displayUsers.filter(u => u.name.toLowerCase().includes(term) || u.mobile.includes(term));
+            displayUsers.sort((a, b) => { return (latestMessages[b.mobile]?.timestamp || parseInt(b.lastActive) || 0) - (latestMessages[a.mobile]?.timestamp || parseInt(a.lastActive) || 0); });
+
+            contactsContainer.innerHTML = '';
+            if (displayUsers.length === 0) return contactsContainer.innerHTML = `<p class="text-center text-[#8696a0] text-[16px] mt-10 p-6">No chats found.</p>`;
+            
+            displayUsers.forEach(user => {
+                const isActive = activeContactMobile === user.mobile;
+                const activeClass = isActive ? 'contact-active' : 'hover:bg-[#202c33]';
+                const latestMsg = latestMessages[user.mobile];
+                let msgPreview = "Tap to chat..."; let timeString = ""; let isUnread = false; let previewClass = "text-[#8696a0]";
+
+                if (latestMsg) {
+                    const isMe = latestMsg.senderMobile === myMobile;
+                    let tickClass = latestMsg.read ? "text-[#53bdeb]" : "text-[#8696a0]";
+                    const prefix = isMe ? `<i class='fa-solid fa-check-double text-[12px] mr-1 ${tickClass}'></i> ` : "";
+                    
+                    if(latestMsg.isCallLog) {
+                        const icon = latestMsg.callType === 'video' ? 'fa-video' : 'fa-phone';
+                        const color = latestMsg.callStatus === 'missed' ? 'text-red-500' : 'text-[#8696a0]';
+                        msgPreview = `<i class='fa-solid ${icon} ${color} mr-1'></i> ${latestMsg.text}`;
+                    }
+                    else if (latestMsg.text) msgPreview = prefix + escapeHTML(latestMsg.text);
+                    else if (latestMsg.fileUrl) {
+                        if (latestMsg.fileType?.startsWith('image/')) msgPreview = prefix + "<i class='fa-solid fa-camera mr-1'></i> Photo";
+                        else if (latestMsg.fileType?.startsWith('video/')) msgPreview = prefix + "<i class='fa-solid fa-video mr-1'></i> Video";
+                        else if (latestMsg.fileType?.startsWith('audio/')) msgPreview = prefix + "<i class='fa-solid fa-microphone mr-1'></i> Voice message";
+                        else msgPreview = prefix + "<i class='fa-solid fa-file mr-1'></i> Document";
+                    }
+                    timeString = latestMsg.timeString || "";
+                    if (!isMe && latestMsg.timestamp > parseInt(localStorage.getItem(`read_${user.mobile}`) || '0') && !latestMsg.read) { isUnread = true; previewClass = "text-white font-medium"; }
+                }
+
+                let unreadBadge = isUnread ? `<span class="bg-[#00a884] text-[#111b21] text-[11px] font-bold px-2 py-0.5 rounded-full ml-2">New</span>` : ``;
+                if(user.typingTo === myMobile) { msgPreview = "<span class='text-[#00a884] font-medium text-[14px]'>typing...</span>"; previewClass = ""; unreadBadge = ""; }
+
+                const userAvatar = getAvatarUrl(user.name, user.avatarUrl);
+                const div = document.createElement('div');
+                div.className = `flex items-center cursor-pointer transition-colors p-3.5 border-b border-[#222d34] ${activeClass} group relative`;
+                
+                div.innerHTML = `
+                    <div class="relative shrink-0 mr-4" onclick="openPrivateChat('${user.name}', '${user.mobile}', '${userAvatar}')">
+                        <img src="${userAvatar}" class="w-12 h-12 rounded-full object-cover bg-[#111b21]">
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center overflow-hidden" onclick="openPrivateChat('${user.name}', '${user.mobile}', '${userAvatar}')">
+                        <div class="flex justify-between items-center mb-1">
+                            <h3 class="text-[17.5px] font-bold text-white truncate pr-2 tracking-[0.3px]">${user.name}</h3>
+                            <span class="text-[12px] ${isUnread ? 'text-[#00a884] font-medium' : 'text-[#8696a0]'} shrink-0">${timeString}</span>
+                        </div>
+                        <div class="flex justify-between items-center gap-2">
+                            <p class="text-[14px] ${previewClass} truncate w-full">${msgPreview}</p>
+                            ${unreadBadge}
+                        </div>
+                    </div>
+                    <div class="shrink-0 relative ml-1">
+                        <button onclick="toggleContactMenu('${user.mobile}', event)" class="text-[#8696a0] hover:text-white px-2 py-3 transition-colors">
+                            <i class="fa-solid fa-ellipsis-vertical text-[16px]"></i>
+                        </button>
+                        <div id="contact-menu-${user.mobile}" class="dropdown-menu absolute top-full right-0 mt-1 bg-[#233138] border border-[#222d34] rounded-md shadow-xl py-1 w-40 z-[60]">
+                            <button onclick="toggleLockContact('${user.mobile}', event)" class="w-full text-left px-4 py-2.5 text-[15px] text-white hover:bg-[#111b21] transition-colors flex items-center">
+                                <i class="fa-solid ${isViewingLocked ? 'fa-unlock' : 'fa-lock'} text-[#00a884] w-6 text-center mr-1"></i> 
+                                ${isViewingLocked ? 'Unlock Chat' : 'Lock Chat'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                contactsContainer.appendChild(div);
+            });
+        }
+
+        function closeChatLogic() {
+            document.getElementById('sidebar').classList.remove('hidden'); document.getElementById('sidebar').classList.add('flex');
+            if (window.innerWidth < 768) {
+                document.getElementById('chat-area').classList.remove('flex'); document.getElementById('chat-area').classList.add('hidden');
+                if (window.location.hash === '#chat') history.replaceState(null, null, ' '); 
+            } else document.getElementById('empty-chat-state').classList.remove('hidden');
+            activeContactMobile = null; renderContacts();
+            if(currentChatUnsubscribe) currentChatUnsubscribe(); if(userStatusUnsubscribe) userStatusUnsubscribe(); closeAllMenus();
+        }
+        
+        window.closeChatMobile = () => { if (window.innerWidth < 768 && window.location.hash === '#chat') history.back(); else closeChatLogic(); };
+        window.addEventListener('popstate', (e) => {
+            if (window.location.hash !== '#chat') {
+                closeChatLogic();
+            }
+        });
+
+        window.openPrivateChat = async (contactName, contactMobile, contactAvatarUrl) => {
+            activeContactMobile = contactMobile; localStorage.setItem(`read_${contactMobile}`, Date.now());
+            document.getElementById('active-chat-name').innerText = contactName; document.getElementById('active-chat-avatar').src = contactAvatarUrl;
+            document.getElementById('empty-chat-state').classList.add('hidden');
+            document.getElementById('lock-chat-btn').innerText = lockedContacts.includes(contactMobile) ? "Unlock chat" : "Lock chat";
+            
+            const chatArea = document.getElementById('chat-area');
+            if (window.innerWidth < 768) {
+                if (!document.getElementById('sidebar').classList.contains('hidden')) history.pushState({ chatOpen: true }, "Chat", "#chat");
+                document.getElementById('sidebar').classList.remove('flex'); document.getElementById('sidebar').classList.add('hidden'); 
+                chatArea.classList.remove('hidden'); chatArea.classList.add('flex'); 
+            } else { chatArea.classList.remove('hidden'); chatArea.classList.add('flex'); }
+
+            msgBox.classList.remove('fade-in-anim'); void msgBox.offsetWidth; msgBox.classList.add('fade-in-anim');
+            renderContacts(); document.querySelectorAll('.pvt-msg').forEach(e => e.remove());
+
+            const chatId = generateChatId(myMobile, contactMobile);
+            
+            // --- Dexie.js (অফলাইন থেকে চ্যাট লোড করা) ---
+            let msgs = [];
+            const cachedRecord = await localDB.chatHistory.get(chatId);
+            if(cachedRecord && cachedRecord.messages) {
+                 msgs = cachedRecord.messages;
+                 msgs.forEach(mData => msgBox.appendChild(createMessageElement(mData.id, mData, contactName)));
+                 msgBox.scrollTop = msgBox.scrollHeight;
+            }
+            const cachedChat = msgs.length > 0;
+
+            if(userStatusUnsubscribe) userStatusUnsubscribe();
+            userStatusUnsubscribe = onSnapshot(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', contactMobile), (docSnap) => {
+                const statusElem = document.getElementById('active-chat-status');
+                if(docSnap.exists()){
+                    const uData = docSnap.data(); if(uData.avatarUrl) document.getElementById('active-chat-avatar').src = getAvatarUrl(contactName, uData.avatarUrl);
+                    if(uData.typingTo === myMobile) { statusElem.innerText = 'typing...'; statusElem.className = 'text-[14px] text-[#00a884] font-medium mt-0.5'; } 
+                    else {
+                        const onlineVisible = uData.statusVisible !== false;
+                        const isOnline = onlineVisible && (Date.now() - uData.lastActive) < 120000;
+                        statusElem.innerText = isOnline ? 'online' : 'click here for contact info';
+                        statusElem.className = 'text-[13px] text-[#8696a0] mt-0.5';
+                    }
+                }
+            });
+
+            if (currentChatUnsubscribe) currentChatUnsubscribe();
+            currentChatUnsubscribe = onSnapshot(query(collection(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${chatId}`), orderBy('timestamp', 'asc'), limit(500)), (snapshot) => {
+                let cacheArray = [];
+                if(!cachedChat) msgBox.innerHTML = ''; 
+
+                snapshot.docChanges().forEach(change => {
+                    const mData = change.doc.data(); mData.id = change.doc.id;
+                    if (!mData.read && mData.senderMobile !== myMobile) updateDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${chatId}`, change.doc.id), { read: true });
+                    
+                    if(cachedChat) {
+                        const oldNode = document.getElementById(`msg-${change.doc.id}`);
+                        if(change.type === "added" && !oldNode) msgBox.appendChild(createMessageElement(change.doc.id, mData, contactName));
+                        else if(change.type === "modified" && oldNode) oldNode.replaceWith(createMessageElement(change.doc.id, mData, contactName));
+                        else if(change.type === "removed" && oldNode) oldNode.remove();
+                    } else {
+                        msgBox.appendChild(createMessageElement(change.doc.id, mData, contactName));
+                    }
+                });
+
+                // --- Dexie.js (অফলাইনের জন্য নতুন মেসেজ সেভ করা) ---
+                snapshot.docs.forEach(doc => { let d = doc.data(); d.id = doc.id; cacheArray.push(d); });
+                localDB.chatHistory.put({ chatId: chatId, messages: cacheArray });
+
+                localStorage.setItem(`read_${activeContactMobile}`, Date.now()); renderContacts(); setTimeout(() => msgBox.scrollTop = msgBox.scrollHeight, 100);
+            });
+        };
+
+        window.toggleReactionMenu = (docId, e) => {
+            e.stopPropagation(); if(e.target.closest('button')) return; 
+            const menu = document.getElementById(`react-menu-${docId}`); const isHidden = menu.classList.contains('hidden'); closeAllMenus(); if(isHidden) menu.classList.remove('hidden');
+        };
+        window.addReaction = async (docId, emoji, e) => { if(e) e.stopPropagation(); closeAllMenus(); try { await updateDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${generateChatId(myMobile, activeContactMobile)}`, docId), { reaction: emoji }); } catch(e){} };
+        window.removeReaction = async (docId, e) => { if(e) e.stopPropagation(); try { await updateDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${generateChatId(myMobile, activeContactMobile)}`, docId), { reaction: null }); } catch(e){} };
+        window.deleteMsg = async (docId, e) => { if(e) e.stopPropagation(); closeAllMenus(); if(confirm("Delete message for everyone?")) { try { await deleteDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${generateChatId(myMobile, activeContactMobile)}`, docId)); } catch(e){} } };
+
+        function uploadFileWithProgress(file) {
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest(); xhr.open('POST', CLOUDINARY_URL, true);
+                const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+                xhr.upload.onprogress = (e) => { if (e.lengthComputable) { const percent = Math.round((e.loaded / e.total) * 100); sendBtn.innerHTML = `<span class="text-[13px] font-bold text-[#00a884]">${percent}%</span>`; } };
+                xhr.onload = () => { if (xhr.status === 200) resolve(JSON.parse(xhr.responseText)); else reject("Upload failed"); }; xhr.onerror = () => reject("Network error"); xhr.send(formData);
+            });
+        }
+
+        // --- Offline Send System Updated ---
+        chatForm.onsubmit = async (e) => {
+            e.preventDefault(); const text = msgInput.value.trim(); if ((!text && !selectedFile) || !activeContactMobile) return;
+            sendBtn.disabled = true; sendBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[22px] text-[#00a884]"></i>';
+            setDoc(doc(db, 'artifacts', SYNC_APP_ID, 'public', 'data', 'chat_users', myMobile), { typingTo: null }, { merge: true });
+            
+            const chatId = generateChatId(myMobile, activeContactMobile);
+            const msgData = {
+                text: text, senderMobile: myMobile, timestamp: Date.now(), 
+                timeString: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+                fileUrl: null, fileName: null, fileType: null, reaction: null, read: false
+            };
+
+            try {
+                if (selectedFile) { 
+                    if(!navigator.onLine) {
+                        alert("অফলাইনে ফাইল বা ছবি সেন্ড করা যাবে না। দয়া করে নেট কানেকশন চালু করুন।");
+                        throw new Error("Offline file upload blocked");
+                    }
+                    const uploadResult = await uploadFileWithProgress(selectedFile); 
+                    if(uploadResult.secure_url) { msgData.fileUrl = uploadResult.secure_url; msgData.fileName = selectedFile.name; msgData.fileType = selectedFile.type || 'audio/mp3'; } else throw new Error("Cloudinary failed"); 
+                }
+
+                if (navigator.onLine) {
+                    await addDoc(collection(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${chatId}`), msgData);
+                } else {
+                    // নেট না থাকলে Dexie.js এর Outbox এ জমা হবে
+                    msgData.chatId = chatId;
+                    msgData.isPending = true;
+                    await localDB.outbox.add(msgData);
+                    
+                    const tempId = 'temp_' + Date.now();
+                    msgData.id = tempId;
+                    msgBox.appendChild(createMessageElement(tempId, msgData, document.getElementById('active-chat-name').innerText));
+                    msgBox.scrollTop = msgBox.scrollHeight;
+                }
+
+                msgInput.value = ''; clearFile(); msgInput.style.height = '24px'; toggleInputButtons(); localStorage.setItem(`read_${activeContactMobile}`, Date.now()); msgInput.focus();
+            } catch (error) { console.error("Message failed:", error); } 
+            finally { sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane text-[22px] ml-1"></i>'; sendBtn.disabled = msgInput.value.trim() === '' && !selectedFile; }
+        };
+
+        window.toggleCustomAudio = (id, btn) => {
+            const audio = document.getElementById(id); const icon = btn.querySelector('i');
+            if (audio.paused) { document.querySelectorAll('audio').forEach(a => { if(a.id !== id && a.id.startsWith('audio_pvt_')) { a.pause(); const ob = document.getElementById('btn_'+a.id); if(ob) ob.querySelector('i').className = 'fa-solid fa-play'; } }); audio.play(); icon.className = 'fa-solid fa-pause'; } 
+            else { audio.pause(); icon.className = 'fa-solid fa-play'; }
+        };
+        window.updateAudioProgress = (id, audio) => { const s = document.getElementById('slider_'+id); const t = document.getElementById('time_'+id); if(audio.duration && s) { s.value = (audio.currentTime / audio.duration) * 100; t.innerText = formatTime(audio.currentTime); } };
+        window.seekAudio = (id, slider) => { const a = document.getElementById(id); if(a.duration) a.currentTime = (slider.value / 100) * a.duration; };
+        window.audioEnded = (id, audio) => { const b = document.getElementById('btn_'+id); if(b) b.querySelector('i').className = 'fa-solid fa-play'; const s = document.getElementById('slider_'+id); if(s) s.value = 0; const t = document.getElementById('time_'+id); if(t) t.innerText = formatTime(audio.duration || 0); };
+        window.initAudioDuration = (id, audio) => { const t = document.getElementById('time_'+id); if(t) t.innerText = formatTime(audio.duration); };
+
+        function getDownloadableUrl(originalUrl) { return originalUrl && originalUrl.includes('/upload/') ? originalUrl.replace('/upload/', '/upload/fl_attachment/') : originalUrl; }
+
+        function createMessageElement(docId, data, contactName) {
+            const msgDiv = document.createElement('div'); msgDiv.id = `msg-${docId}`;
+            if(data.isCallLog) {
+                msgDiv.className = `pvt-msg flex justify-center w-full my-2`; const icon = data.callType === 'video' ? 'fa-video' : 'fa-phone'; const color = data.callStatus === 'missed' ? 'text-red-500' : 'text-[#8696a0]';
+                msgDiv.innerHTML = `<div class="bg-[#182229] border border-[#222d34] text-[#e9edef] px-4 py-1.5 rounded-xl text-[14px] flex items-center gap-2 shadow-sm font-medium"><i class="fa-solid ${icon} ${color}"></i> ${data.text}</div>`; return msgDiv;
+            }
+            const isMe = data.senderMobile === myMobile; const bubbleClasses = isMe ? 'bg-[#005c4b] self-end rounded-tr-none shadow-[0_1px_0.5px_rgba(11,20,26,.13)]' : 'bg-[#202c33] self-start rounded-tl-none shadow-[0_1px_0.5px_rgba(11,20,26,.13)]'; const textColor = 'text-[#e9edef]';
+            const bottomMargin = data.reaction ? 'mb-7' : 'mb-1.5'; msgDiv.className = `pvt-msg flex flex-col max-w-[85%] md:max-w-[65%] ${bubbleClasses} px-2 pt-1.5 pb-1 rounded-xl ${bottomMargin} relative cursor-pointer select-none group`; msgDiv.onclick = (e) => toggleReactionMenu(docId, e);
+            let content = '';
+            if (data.fileUrl) {
+                if (data.fileType && data.fileType.startsWith('audio/')) {
+                    const audioId = `audio_pvt_${docId}`; const avatarForAudio = isMe ? getAvatarUrl(myName, myAvatarUrl) : document.getElementById('active-chat-avatar').src; const micColor = isMe ? 'text-[#53bdeb]' : 'text-[#00a884]'; const sliderColor = isMe ? 'white' : '#00a884';
+                    content = `<div class="flex items-center gap-3 w-60 md:w-72 pt-2 pb-2 pl-1"><div class="relative shrink-0"><img src="${avatarForAudio}" class="w-12 h-12 rounded-full object-cover"><div class="absolute -bottom-1 -right-1 bg-transparent rounded-full p-1"><i class="fa-solid fa-microphone ${micColor} text-[15px]"></i></div></div><button id="btn_${audioId}" onclick="toggleCustomAudio('${audioId}', this); event.stopPropagation();" class="text-4xl text-[#8696a0] hover:text-[#d1d7db] transition-colors w-10 text-left"><i class="fa-solid fa-play"></i></button><div class="flex flex-col flex-grow relative top-1"><input type="range" id="slider_${audioId}" min="0" max="100" value="0" class="audio-slider w-full" style="background: rgba(134,150,160,0.3); color: ${sliderColor}" oninput="seekAudio('${audioId}', this); event.stopPropagation();" onclick="event.stopPropagation();"><div class="flex justify-between items-center mt-2"><span id="time_${audioId}" class="text-[12px] text-[#8696a0]">0:00</span></div></div><audio id="${audioId}" src="${data.fileUrl}" preload="metadata" onloadedmetadata="initAudioDuration('${audioId}', this)" ontimeupdate="updateAudioProgress('${audioId}', this)" onended="audioEnded('${audioId}', this)"></audio></div>`;
+                } 
+                else if (data.fileType && data.fileType.startsWith('video/')) content = `<video controls class="rounded-lg mb-1 mt-1 max-h-72 w-full object-cover bg-black/40"><source src="${data.fileUrl}"></video>`;
+                else if (data.fileType && data.fileType.startsWith('image/')) content = `<img src="${data.fileUrl}" class="rounded-lg mb-1 mt-1 max-h-72 w-full object-cover cursor-pointer" onclick="openLightbox('${data.fileUrl}', event)">`;
+                else { const forcedDownloadUrl = getDownloadableUrl(data.fileUrl); content = `<a href="${forcedDownloadUrl}" download="${data.fileName}" target="_blank" class="bg-[#2a3942]/50 hover:bg-[#2a3942] p-3.5 rounded-lg flex items-center gap-4 text-[15px] mb-1 mt-1 transition-colors w-full border border-transparent"><i class="fa-solid fa-file-arrow-down text-3xl text-[#8696a0] shrink-0"></i> <span class="truncate font-medium ${textColor}">${data.fileName}</span></a>`; }
+            }
+            let finalHtmlText = data.text ? `<p class="text-[16px] whitespace-pre-wrap leading-snug px-1 ${textColor} mt-1">${escapeHTML(data.text)}</p>` : '';
+            let reactionBadge = data.reaction ? `<div class="absolute -bottom-4 ${isMe ? 'right-2' : 'left-2'} bg-[#202c33] border border-[#222d34] rounded-full px-2.5 py-0.5 text-[14px] shadow-sm z-10 hover:bg-[#2a3942] transition-colors" onclick="removeReaction('${docId}', event)" title="Remove reaction">${data.reaction}</div>` : '';
+            let popupMenu = `<div id="react-menu-${docId}" class="reaction-menu-popup hidden absolute ${isMe ? 'right-0' : 'left-0'} -top-14 bg-[#233138] border border-[#222d34] rounded-full flex items-center gap-2 px-3 py-1.5 shadow-xl z-[60] min-w-max"><button onclick="addReaction('${docId}', '👍', event)" class="hover:scale-125 transition-all text-2xl">👍</button><button onclick="addReaction('${docId}', '❤️', event)" class="hover:scale-125 transition-all text-2xl">❤️</button><button onclick="addReaction('${docId}', '😂', event)" class="hover:scale-125 transition-all text-2xl">😂</button><button onclick="addReaction('${docId}', '😢', event)" class="hover:scale-125 transition-all text-2xl">😢</button>${isMe ? `<div class="w-[1px] h-6 bg-[#374045] mx-1"></div><button onclick="deleteMsg('${docId}', event)" class="hover:scale-125 transition-all text-[#f15c6d] text-xl"><i class="fa-solid fa-trash"></i></button>` : ''}</div>`;
+            
+            // --- Clock icon for pending messages ---
+            let tickColor = data.read ? "text-[#53bdeb]" : "text-[#8696a0]"; 
+            let ticksHtml = isMe ? (data.isPending ? `<i class="fa-regular fa-clock text-[12px] text-[#8696a0] ml-1"></i>` : `<i class="fa-solid fa-check-double text-[12px] ${tickColor} ml-1"></i>`) : '';
+            
+            let timeMargin = (data.text || !data.fileUrl || (data.fileType && data.fileType.startsWith('audio/'))) ? "mt-1 float-right inline-block pl-4" : `absolute bottom-2 right-2 px-1.5 py-0.5 rounded-md backdrop-blur-sm bg-black/40`;
+            msgDiv.innerHTML = `${popupMenu}${content}<div class="relative"><span style="display:inline-block; max-width: calc(100% - 65px); vertical-align:top;">${finalHtmlText}</span><div class="inline-flex items-center justify-end ${timeMargin} relative top-[3px]"><span class="text-[11.5px] text-[#8696a0]">${data.timeString}</span>${ticksHtml}</div></div>${reactionBadge}`; return msgDiv;
+        }
+        function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)); }
+
+        // --- Offline Message Auto-Sync System ---
+        async function processOutboxMsgs() {
+            if (!navigator.onLine) return; // নেট না থাকলে রিটার্ন করবে
+            
+            try {
+                const pendingMsgs = await localDB.outbox.toArray();
+                if (pendingMsgs.length === 0) return; // পেন্ডিং মেসেজ না থাকলে কিছু করবে না
+
+                console.log(`${pendingMsgs.length} টি পেন্ডিং মেসেজ সেন্ড হচ্ছে...`);
+                
+                for (const msg of pendingMsgs) {
+                    const outboxId = msg.id;
+                    const targetChatId = msg.chatId;
+
+                    // লোকাল ডেটাগুলো মুছে ফেলি ফায়ারবেসে পাঠানোর আগে
+                    delete msg.id;
+                    delete msg.chatId;
+                    delete msg.isPending;
+
+                    await addDoc(collection(db, 'artifacts', SYNC_APP_ID, 'public', 'data', `pvt_msg_${targetChatId}`), msg);
+                    await localDB.outbox.delete(outboxId); // সেন্ড সফল হলে Outbox থেকে ডিলিট
+                    console.log("পেন্ডিং মেসেজ সফলভাবে সেন্ড হয়েছে!");
+                }
+            } catch (e) {
+                console.error("পেন্ডিং মেসেজ সেন্ড হতে ব্যর্থ:", e);
+            }
+        }
+
+        // যখনই ইন্টারনেট কানেকশন ফিরে আসবে, এই ইভেন্ট কল হবে
+        window.addEventListener('online', () => {
+            processOutboxMsgs();
+        });
+
+        // অ্যাপ চালু হওয়ার সময় একবার চেক করে নেবে কোনো পেন্ডিং মেসেজ আছে কি না
+        window.addEventListener('load', () => {
+            setTimeout(processOutboxMsgs, 3000); 
+        });
+
+    </script>
+</body>
+</html>
