@@ -1,68 +1,33 @@
-name: Build Native RasGram Desktop
+name: Build Python App
 
 on:
   push:
-    branches: [ "main", "master" ]
-
-# Node.js এর ওয়ার্নিং বন্ধ করার জন্য এবং ফিউচার-প্রুফ করার
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout Code
+    - name: Check out Git repository
       uses: actions/checkout@v4
-      with:
-        set-safe-directory: true
 
-    - name: Set up Python
+    - name: Setup Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
 
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pywebview pystray pillow pyinstaller
+        pip install pywebview pyinstaller
 
-    - name: Create Native EXE (Offline Bundle)
-      shell: pwsh
-      run: |
-        # এখানে *.html এবং *.js দিয়ে আপনার সব ফাইল প্যাক করা হচ্ছে
-        # যদি tailwind.min.js বা all.min.css ফাইল থাকে, সেগুলোও অটো প্যাক হবে
-        pyinstaller --onefile --windowed --add-data "*.html;." --add-data "*.js;." --add-data "*.css;." --name "RasGram" main.py
+    - name: Build Windows exe
+      run: pyinstaller --noconsole --onefile --windowed --add-data "index.html;." main.py
 
-    - name: Build Installer (Inno Setup)
-      shell: pwsh
-      run: |
-        $iss = @"
-        [Setup]
-        AppName=RasGram Native
-        AppVersion=1.0
-        DefaultDirName={pf}\RasGram
-        DefaultGroupName=RasGram
-        OutputDir=.
-        OutputBaseFilename=RasGram_Native_Setup
-        PrivilegesRequired=admin
-
-        [Files]
-        Source: "dist\RasGram.exe"; DestDir: "{app}"; Flags: ignoreversion
-
-        [Icons]
-        Name: "{commondesktop}\RasGram"; Filename: "{app}\RasGram.exe"
-        Name: "{userstartup}\RasGram"; Filename: "{app}\RasGram.exe"
-
-        [Run]
-        Filename: "{app}\RasGram.exe"; Description: "Launch RasGram"; Flags: nowait postinstall skipifsilent
-        "@
-        $iss | Out-File -FilePath setup.iss -Encoding utf8
-        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup.iss
-
-    - name: Upload Artifact
+    - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: RasGram-Native-App
-        path: RasGram_Native_Setup.exe
+        name: RasFocus-exe
+        path: dist/*.exe
